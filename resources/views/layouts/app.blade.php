@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>@yield('title','Test')</title>
+  <title>@yield('title') | WEBSITE BANH NGOT</title>
 
   {{-- Bootstrap + Icons (CDN) --}}
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -26,13 +26,15 @@
 <header class="topbar sticky-top">
   <div class="container container-wide py-2">
     <div class="d-flex align-items-center gap-3">
+      
 
-      {{-- Logo --}}
+      {{-- start Logo --}}
       <a href="{{ route('home') }}" class="text-decoration-none d-flex align-items-center gap-2">
         <span class="brand fs-4">STU Bakery</span>
       </a>
+       {{-- end Logo --}}
 
-      {{-- Tìm kiếm desktop --}}
+      {{-- start Tìm kiếm desktop --}}
       <form class="flex-grow-1 d-none d-md-block">
         <div class="input-group">
           <input class="form-control search-input px-4" type="search" placeholder="Tìm kiếm">
@@ -41,8 +43,9 @@
           </button>
         </div>
       </form>
+      {{-- end Tìm kiếm desktop --}}
 
-      {{-- Icon phải --}}
+      {{-- start Icon phải --}}
       <div class="ms-auto d-flex align-items-center gap-3">
         <a href="#" class="position-relative text-dark text-decoration-none">
           <i class="bi bi-cart3 fs-4"></i>
@@ -62,15 +65,17 @@
             <li><a class="dropdown-item" href="#">Đơn hàng</a></li>
           </ul>
         </div>
+        {{-- end Icon phải --}}
 
-        {{-- Nút search mobile --}}
+        {{-- start Nút search mobile --}}
         <button class="btn d-md-none" data-bs-toggle="collapse" data-bs-target="#mSearch">
           <i class="bi bi-search fs-5"></i>
         </button>
       </div>
     </div>
+     {{-- end Nút search mobile --}}
 
-    {{-- Ô tìm kiếm mobile --}}
+    {{-- start Ô tìm kiếm mobile --}}
     <div id="mSearch" class="collapse mt-2 d-md-none">
       <form>
         <div class="input-group">
@@ -81,8 +86,9 @@
         </div>
       </form>
     </div>
+    {{-- end Ô tìm kiếm mobile --}}
 
-    {{-- Nút Danh mục --}}
+    {{-- start Nút Danh mục --}}
     <div class="mt-3">
       <button class="btn category-btn px-3 py-2" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCategories">
         <i class="bi bi-list me-2"></i> Danh mục
@@ -90,8 +96,9 @@
     </div>
   </div>
 </header>
+{{-- end Nút Danh mục --}}
 
-{{-- Offcanvas Danh mục --}}
+{{-- start Offcanvas Danh mục --}}
 <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasCategories">
   <div class="offcanvas-header">
     <h5 class="offcanvas-title">Danh mục</h5>
@@ -103,17 +110,23 @@
       <li><a class="dropdown-item py-2" href="#">Bánh mì</a></li>
       <li><a class="dropdown-item py-2" href="#">Lọc theo giá</a></li>
       <li><a class="dropdown-item py-2" href="#">Signature</a></li>
+      <li><a class="dropdown-item py-2" href="chinhsach">Các chính sách của cửa hàng</a></li>
     </ul>
   </div>
 </div>
+{{-- end Offcanvas Danh mục --}}
 
+{{-- start Layout main body --}}
 <main>@yield('content')</main>
+{{-- end Layout main body --}}
 
+{{-- start footer --}}
 <footer class="mt-5 py-4 bg-light">
   <div class="container container-wide text-center small text-muted">
     © {{ date('Y') }} Stu-DoAn
   </div>
 </footer>
+{{-- end footer --}}
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 @stack('scripts')
