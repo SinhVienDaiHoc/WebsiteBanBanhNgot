@@ -99,10 +99,27 @@
   </div>
   <div class="offcanvas-body small">
     <ul class="list-unstyled">
-      <li><a class="dropdown-item py-2" href="#">Bánh ngọt</a></li>
-      <li><a class="dropdown-item py-2" href="#">Bánh mì</a></li>
-      <li><a class="dropdown-item py-2" href="#">Lọc theo giá</a></li>
-      <li><a class="dropdown-item py-2" href="#">Signature</a></li>
+
+  
+
+      {{-- Bánh ngọt: link sang trang mới --}}
+      <li>
+        <a class="dropdown-item py-2" href="{{ route('category.banhngot') }}">
+          Bánh ngọt
+        </a>
+      </li>
+      <li>
+
+    <a class="dropdown-item py-2" href="{{ route('category.banhkem') }}">
+        Bánh kem
+    </a>
+</li>
+
+
+
+
+      <li><a class="dropdown-item py-2" href="#">Cần thêm</a></li>
+      <li><a class="dropdown-item py-2" href="#">Cần thêm</a></li>
     </ul>
   </div>
 </div>
