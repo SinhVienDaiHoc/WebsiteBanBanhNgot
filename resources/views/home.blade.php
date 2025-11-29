@@ -8,8 +8,6 @@
        alt="Banner" 
        style="width: 60%; height: 20cm; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,.1);">
 </div>
-
-
 <section class="py-3">
   <div class="container container-wide hero">
 
@@ -27,8 +25,5 @@
 
   </div>
 </section>
-
-
-  </div>
 </section>
 @endsection

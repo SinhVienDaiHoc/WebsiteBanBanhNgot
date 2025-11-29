@@ -1,9 +1,10 @@
 <!doctype html>
-<html lang="vi">
+<html lang="{{ str_replace('_','-', app()->getLocale() ) }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>@yield('title') | WEBSITE BANH NGOT</title>
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>@yield('title') | {{ config('app.name') }}</title>
 
   {{-- Bootstrap + Icons (CDN) --}}
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -59,8 +60,8 @@
             <span class="d-none d-lg-inline">Tài khoản</span>
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="#">Đăng nhập</a></li>
-            <li><a class="dropdown-item" href="#">Đăng ký</a></li>
+            <li><a class="dropdown-item" href="/login">Đăng nhập</a></li>
+            <li><a class="dropdown-item" href="/register">Đăng ký</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="#">Đơn hàng</a></li>
           </ul>
@@ -109,7 +110,6 @@
 
       <li><a class="dropdown-item py-2" href="#">Bánh ngọt</a></li>
       <li><a class="dropdown-item py-2" href="#">Bánh mì</a></li>
-      <li><a class="dropdown-item py-2" href="#">Lọc theo giá</a></li>
       <li><a class="dropdown-item py-2" href="#">Signature</a></li>
       <li><a class="dropdown-item py-2" href="chinhsach">Các chính sách của cửa hàng</a></li>
 
