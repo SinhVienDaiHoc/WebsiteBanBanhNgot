@@ -1,0 +1,34 @@
+/* MÀU NỀN HEADER */
+.custom-header {
+    background-color: #996666 !important;  /* màu nâu bánh ngọt */
+}
+
+/* Nút tìm kiếm */
+.search-btn {
+    background-color: #ffffff !important;
+    border: 1px solid #ccc;
+    border-radius: 30px;
+}
+
+.search-btn i {
+    color: #555 !important;
+}
+
+/* Cho nguyên cụm search có nền trắng, không dính màu header */
+.input-group {
+    background-color: #ffffff !important;
+    border-radius: 40px;
+    overflow: hidden;
+}
+
+/* NỀN CHUNG CHO TOÀN TRANG + FOOTER */
+html,
+body,
+.site-background,
+main,
+footer,
+.footer-background {
+    background-color: #F8EEDB !important;   /* màu kem */
+    border: none !important;
+    box-shadow: none !important;
+}

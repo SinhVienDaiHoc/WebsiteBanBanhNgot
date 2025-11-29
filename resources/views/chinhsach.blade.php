@@ -1,5 +1,5 @@
-@extends('layouts.app');
-@section ('title','Chinh sach');
+@extends('layouts.app')
+@section ('title','Chinh sach')
 @section('content')
 <!DOCTYPE html>
 <html lang="en">
@@ -21,7 +21,7 @@
             <p>Tại
                 {{-- start tên cửa hàng put here --}}
                  <strong><<"Tên cửa hàng">></strong>
-                {{-- end tên cửa hàng put here --}},
+                {{-- end tên cửa hàng put here --}}
                 sự hài lòng của khách hàng được đặt lên hàng đầu. Tiệm áp dụng <strong>chính sách kiểm hàng</strong> minh bạch để đảm bảo khách hàng nhận được những chiếc bánh đúng như mong muốn, mong đợi. 
                 </p>
                 

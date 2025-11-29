@@ -1,7 +1,11 @@
 <!doctype html>
 <html lang="{{ str_replace('_','-', app()->getLocale() ) }}">
 <head>
+
   <meta charset="utf-8">
+  <title>STU Bakery</title>
+  
+  
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>@yield('title') | {{ config('app.name') }}</title>
@@ -9,10 +13,10 @@
   {{-- Bootstrap + Icons (CDN) --}}
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
   <style>
     .container-wide{max-width:1200px}
-    .topbar{background:#fff;box-shadow:0 6px 14px rgba(0,0,0,.04)}
+    .topbar{background:#F8EEDB;box-shadow:0 6px 14px rgba(0,0,0,.04)}
     .brand{font-weight:800;color:#ffb000}
     .search-input{border-radius:999px;background:#f6f7fb}
     .category-btn{border-radius:12px;background:#f4f6f8}
@@ -22,9 +26,11 @@
   </style>
   @stack('head')
 </head>
-<body class="bg-white">
+<body class="site-background">
 
-<header class="topbar sticky-top">
+
+<header class="topbar sticky-top custom-header">
+
   <div class="container container-wide py-2">
     <div class="d-flex align-items-center gap-3">
       
@@ -39,9 +45,11 @@
       <form class="flex-grow-1 d-none d-md-block">
         <div class="input-group">
           <input class="form-control search-input px-4" type="search" placeholder="Tìm kiếm">
-          <button class="btn btn-outline-secondary px-3 rounded-end-pill" type="submit">
-            <i class="bi bi-search"></i>
-          </button>
+           <button class="btn search-btn px-3 rounded-end-pill" type="submit">
+           <i class="bi bi-search"></i>
+             </button>
+
+
         </div>
       </form>
       {{-- end Tìm kiếm desktop --}}
@@ -57,14 +65,43 @@
         <div class="dropdown">
           <a href="#" class="text-dark text-decoration-none dropdown-toggle d-flex align-items-center gap-2" data-bs-toggle="dropdown">
             <i class="bi bi-person-circle fs-4"></i>
-            <span class="d-none d-lg-inline">Tài khoản</span>
+            <span class="d-none d-lg-inline">@auth{{ Auth::user()->name }}
+           @else
+            Tài khoản
+           @endauth
+           </span>
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="/login">Đăng nhập</a></li>
-            <li><a class="dropdown-item" href="/register">Đăng ký</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Đơn hàng</a></li>
-          </ul>
+
+            @guest
+        {{-- Khi CHƯA đăng nhập --}}
+        <li>
+            <a class="dropdown-item" href="{{ route('login') }}">Đăng nhập</a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="{{ route('register') }}">Đăng ký</a>
+        </li>
+    @endguest
+
+
+    @auth
+        {{-- Khi ĐÃ đăng nhập --}}
+        <li class="dropdown-item text-dark fw-bold">
+            👤 {{ Auth::user()->name }}
+        </li>
+          <li><a class="dropdown-item" href="#">Đơn hàng</a></li>
+        <li>
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button class="dropdown-item text-danger" type="submit">
+                    Đăng xuất
+                </button>
+            </form>
+        </li>
+    @endauth
+
+</ul>
+
         </div>
         {{-- end Icon phải --}}
 
@@ -108,9 +145,7 @@
   <div class="offcanvas-body small">
     <ul class="list-unstyled">
 
-      <li><a class="dropdown-item py-2" href="#">Bánh ngọt</a></li>
-      <li><a class="dropdown-item py-2" href="#">Bánh mì</a></li>
-      <li><a class="dropdown-item py-2" href="#">Signature</a></li>
+      
       <li><a class="dropdown-item py-2" href="chinhsach">Các chính sách của cửa hàng</a></li>
 
 
@@ -145,7 +180,7 @@
 {{-- end Layout main body --}}
 
 {{-- start footer --}}
-<footer class="mt-5 py-4 bg-light">
+  <footer class="mt-5 py-4 footer-background">
   <div class="container container-wide text-center small text-muted">
     © {{ date('Y') }} Stu-DoAn
   </div>
