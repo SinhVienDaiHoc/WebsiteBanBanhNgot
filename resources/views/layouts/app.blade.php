@@ -42,16 +42,22 @@
        {{-- end Logo --}}
 
       {{-- start Tìm kiếm desktop --}}
-      <form class="flex-grow-1 d-none d-md-block">
-        <div class="input-group">
-          <input class="form-control search-input px-4" type="search" placeholder="Tìm kiếm">
-           <button class="btn search-btn px-3 rounded-end-pill" type="submit">
-           <i class="bi bi-search"></i>
-             </button>
+          <form class="flex-grow-1 d-none d-md-block"
+      action="{{ route('search') }}"
+      method="GET">
+    <div class="input-group">
+        <input class="form-control search-input px-4"
+               type="search"
+               name="q"                         
+               value="{{ request('q') }}"
+               placeholder="Tìm kiếm tên bánh...">
+        <button class="btn search-btn px-3 rounded-end-pill" type="submit">
+            <i class="bi bi-search"></i>
+        </button>
+    </div>
+</form>
 
 
-        </div>
-      </form>
       {{-- end Tìm kiếm desktop --}}
 
       {{-- start Icon phải --}}
@@ -115,15 +121,20 @@
 
     {{-- start Ô tìm kiếm mobile --}}
     <div id="mSearch" class="collapse mt-2 d-md-none">
-      <form>
-        <div class="input-group">
-          <input class="form-control search-input px-4" type="search" placeholder="Tìm kiếm">
-          <button class="btn btn-outline-secondary px-3 rounded-end-pill" type="submit">
-            <i class="bi bi-search"></i>
-          </button>
-        </div>
-      </form>
+  <form action="{{ route('search') }}" method="GET">
+    <div class="input-group">
+      <input class="form-control search-input px-4"
+             type="search"
+             name="q"
+             value="{{ request('q') }}"
+             placeholder="Tìm kiếm tên bánh...">
+      <button class="btn btn-outline-secondary px-3 rounded-end-pill" type="submit">
+        <i class="bi bi-search"></i>
+      </button>
     </div>
+  </form>
+    </div>
+
     {{-- end Ô tìm kiếm mobile --}}
 
     {{-- start Nút Danh mục --}}
