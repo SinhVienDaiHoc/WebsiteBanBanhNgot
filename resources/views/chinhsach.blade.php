@@ -20,7 +20,7 @@
             {{-- start thông báo --}}
             <p>Tại
                 {{-- start tên cửa hàng put here --}}
-                 <strong><<"Tên cửa hàng">></strong>
+                 <strong>Bakery Store</strong>
                 {{-- end tên cửa hàng put here --}}
                 sự hài lòng của khách hàng được đặt lên hàng đầu. Tiệm áp dụng <strong>chính sách kiểm hàng</strong> minh bạch để đảm bảo khách hàng nhận được những chiếc bánh đúng như mong muốn, mong đợi. 
                 </p>
@@ -37,7 +37,7 @@
                 <li>Tình trạng sản phẩm: Đảm bảo bánh không bị bể vỡ, móp méo hoặc hư hỏng trong quá trình vận chuyển.</li>
                 <p class="text-danger
                             fw-bold
-                "><<"Tên cửa hàng">> khuyến khích khách hàng kiểm tra kĩ lưỡng đơn hàng trước khi nhận bánh từ shipper.</p>
+                ">Bakery Store khuyến khích khách hàng kiểm tra kĩ lưỡng đơn hàng trước khi nhận bánh từ shipper.</p>
                 {{-- end kiểm hàng khi nhận bánh --}}
 
                  {{-- start Đồng kiểm cùng shipper --}}
@@ -48,7 +48,7 @@
 
                 {{-- start Xử lí khi có vấn đề --}}
                 <h5>3. Xử lý khi có vấn đề</h5>
-                <p>Nếu trong quá trình kiểm tra, khách hàng phát hiện sản phẩm bị lỗi, sai mẫu hoặc hư hỏng, <<"Tên cửa hàng">> sẽ tiếp nhận phản hồi và hỗ trợ đổi trả sản phẩm hoàn toàn miễn phí với những lỗi trực tiếp từ tiệm. Đồng thời, tiệm cũng hỗ trợ chỉnh sửa bánh có phí đối với lỗi từ đơn vị vận chuyển.</p>
+                <p>Nếu trong quá trình kiểm tra, khách hàng phát hiện sản phẩm bị lỗi, sai mẫu hoặc hư hỏng, Bakery Store sẽ tiếp nhận phản hồi và hỗ trợ đổi trả sản phẩm hoàn toàn miễn phí với những lỗi trực tiếp từ tiệm. Đồng thời, tiệm cũng hỗ trợ chỉnh sửa bánh có phí đối với lỗi từ đơn vị vận chuyển.</p>
                 <p><strong><div class="fst-italic">Lưu ý:</div></strong> Việc đổi trả chỉ áp dụng tại thời điểm giao hàng và có sự xác nhận của nhân viên giao hàng.</p>
                 {{-- end Xử lí khi có vấn đề --}}
 

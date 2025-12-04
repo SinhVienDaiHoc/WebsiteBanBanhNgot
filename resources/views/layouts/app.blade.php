@@ -3,7 +3,7 @@
 <head>
 
   <meta charset="utf-8">
-  <title>STU Bakery</title>
+  <title>Bakery Store</title>
   
   
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -37,7 +37,7 @@
 
       {{-- start Logo --}}
       <a href="{{ route('home') }}" class="text-decoration-none d-flex align-items-center gap-2">
-        <span class="brand fs-4">STU Bakery</span>
+        <span class="brand fs-4">Bakery Store</span>
       </a>
        {{-- end Logo --}}
 

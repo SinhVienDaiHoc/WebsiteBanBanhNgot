@@ -10,7 +10,7 @@ class ProductController extends Controller
      * Danh sách TẤT CẢ bánh (bánh ngọt + bánh kem)
     
      */
-    private function allProducts()
+    public function allProducts()
     {
         return [
             // BÁNH NGỌT
@@ -82,28 +82,20 @@ class ProductController extends Controller
     /**
      * Trang Bánh ngọt
      */
-    public function banhngot()
-    {
-        $all = collect($this->allProducts());
-
-        // Lọc ra những bánh có tag = banhngot
-        $products = $all->where('tag', 'bánh ngọt')->values();
-
-        return view('category.banhngot', compact('products'));
-    }
+   public function banhngot()
+{
+    // KHÔNG cần dùng $products = ... nữa
+    return view('category.banhngot'); // View Composer sẽ tự thêm $products
+}
 
     /**
      * Trang Bánh kem
      */
-    public function banhkem()
-    {
-        $all = collect($this->allProducts());
-
-        // Lọc ra những bánh có tag = banhkem
-        $products = $all->where('tag', 'bánh kem')->values();
-
-        return view('category.banhkem', compact('products'));
-    }
+ public function banhkem()
+{
+    // KHÔNG cần dùng $products = ... nữa
+    return view('category.banhkem'); // View Composer sẽ tự thêm $products
+}
 
     /**
      * Tìm kiếm tên bánh 
