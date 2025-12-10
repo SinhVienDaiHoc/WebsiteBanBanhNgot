@@ -15,6 +15,8 @@ use App\Http\Controllers\ProfileController;
 // TRANG CHỦ 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+
+//CÁC CHÍNH SÁCH CỦA CỬA HÀNG
 Route::get('/chinhsach', [HomeController::class, 'chinhsach'])->name('chinhsach');
 
 // SẢN PHẨM 
@@ -55,6 +57,7 @@ Route::middleware(['auth', IsAdmin::class])
         Route::get('/dashboard', [AdminController::class, 'index'])
             ->name('dashboard');
     });
+Route::get('admin/warning',[AdminController::class,'warning'])->name('admin.warning');
 
 // Đăng nhập admin
 Route::get('admin/login', [AdminLoginController::class, 'showLoginForm'])->name('admin.login');

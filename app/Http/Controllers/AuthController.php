@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     // ===== ĐĂNG KÝ =====
+    
     public function register()
     {
         return view('auth.register');
@@ -51,7 +52,13 @@ public function postLogin(Request $request)
 
     if (Auth::attempt($credentials)) {
         $request->session()->regenerate();
-        return redirect()->route('home')->with('success', 'Đăng nhập thành công!');
+        $user=Auth::user();
+        if($user->role===1){
+            return redirect()->route('admin.dashboard')->with('success','Đăng nhập với tư cách là Admin');
+        }
+        else{
+            return redirect()->route('home')->with('success', 'Đăng nhập thành công!');
+        }        
     }
 
     return back()->withErrors([
