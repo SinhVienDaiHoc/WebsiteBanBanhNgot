@@ -99,9 +99,11 @@
                 <button type="submit" class="submit-button w-full">Đăng Nhập</button>
             </form>
 
-            <p class="text-center text-gray-600 text-sm mt-6">
-                Chưa có tài khoản? <a href="{{ route('register') }}" class="text-blue-600 hover:underline">Đăng ký ngay</a>
+            <p>
+               Chưa có tài khoản? 
+                <a href="{{ route('register') }}">Đăng ký ngay</a>
             </p>
+
         </div>
     </div>
 </div>

@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('phone_admin', function (Blueprint $table) {
-            $table->string('name_admin')->primary();
-            $table->string('phone_number_admin')->nullable();
+            $table->string('name_admin',191)->primary();
+            $table->string('phone_number_admin',191)->nullable();
         });
     }
 

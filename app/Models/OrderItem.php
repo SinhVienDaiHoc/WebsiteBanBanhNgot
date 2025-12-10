@@ -2,28 +2,35 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class OrderItem extends Model
 {
-    use HasFactory;
-    protected $primaryKey = 'id_OrderItem';
-    protected $table='order_item';
+    protected $table = 'order_items';
+
     protected $fillable = [
-'id_OrderItem',
-'date',
-'status',
-'total',
-'amount',
-
+        'order_id',
+        'product_id',
+        'product_name',   
+        'quantity',
+        'price_at_order',
     ];
-    public function order():BelongsTo{
-        return $this->belongsTo(Order::class,'ORDER_id_Order','id_Order');
-    }
+        //RELATIONSHIP
+//================================================
+public function order()
+{
+    return $this->belongsTo(Order::class);
+}
 
-    public function product():BelongsTo{
-        return $this->belongsTo(Product::class,'PRODUCT_id_Product','id_Product');
-    }
+public function product():BelongsTo{
+    return $this->belongsTo(Product::class,'product_id','id');
+}
+
+// Thành tiền = đơn giá * số lượng
+public function getSubtotalAttribute()
+{
+    return $this->price_at_order * $this->quantity;
+}
+//================================================
 }

@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('point', function (Blueprint $table) {
-            $table->integer('id_Points')->primary();
-            $table->integer('points')->nullable();
-            $table->tinyInteger('type')->nullable();
-            $table->timestamps();
+        Schema::table('order_items', function (Blueprint $table) {
+            //
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('point');
+        Schema::table('order_items', function (Blueprint $table) {
+            //
+        });
     }
 };

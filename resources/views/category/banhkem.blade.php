@@ -19,15 +19,28 @@
             </div>
 
             <div class="card-body p-0">
+
+              {{-- Giá + nút giỏ --}}
               <div class="d-flex">
                 <div class="flex-grow-1 px-3 py-2"
                      style="background:#c7d600;color:#fff;font-weight:700;">
-                  {{ $product['price'] }}
+                  {{ number_format($product['price']) }} đ
                 </div>
-                <button class="btn px-3 py-2"
-                        style="background:#4a1f1b;color:#fff;border-radius:0;">
-                  <i class="bi bi-cart"></i>
-                </button>
+
+                {{-- Form thêm vào giỏ hàng --}}
+                <form action="{{ route('cart.add', $product['id']) }}" method="POST" class="m-0">
+                  @csrf
+                  <input type="hidden" name="id" value="{{ $product['id'] }}">
+                  <input type="hidden" name="name" value="{{ $product['name'] }}">
+                  <input type="hidden" name="price" value="{{ $product['price'] }}">
+                  <input type="hidden" name="image" value="{{ $product['image'] }}">
+
+                  <button type="submit"
+                          class="btn px-3 py-2 h-100"
+                          style="background:#4a1f1b;color:#fff;border-radius:0;">
+                    <i class="bi bi-cart"></i>
+                  </button>
+                </form>
               </div>
 
               <div class="px-3 py-3">
@@ -35,11 +48,11 @@
                   {{ $product['name'] }}
                 </div>
 
-                  @if(!empty($product['tag']))
-                    <div class="mt-1 small text-muted">
-                      {{ $product['tag'] }}
-                    </div>
-                  @endif
+                @if(!empty($product['tag']))
+                  <div class="mt-1 small text-muted">
+                    {{ $product['tag'] }}
+                  </div>
+                @endif
               </div>
             </div>
           </div>

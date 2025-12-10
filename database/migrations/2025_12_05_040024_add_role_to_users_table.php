@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payment', function (Blueprint $table) {
-            $table->integer('id_Payment')->primary();
-            $table->tinyInteger('method')->nullable();
-            $table->dateTime('paid_at')->nullable();
-            $table->decimal('amount', 10, 0)->nullable();
+        Schema::table('users', function (Blueprint $table) {
+            //
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payment');
+        Schema::table('users', function (Blueprint $table) {
+            //
+        });
     }
 };

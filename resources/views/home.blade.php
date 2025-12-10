@@ -3,75 +3,63 @@
 
 @section('content')
 
-<div class="my-4 text-center">
-  <img src="{{ asset('images/banner.png') }}" 
-       alt="Banner" 
-       style="width: 60%; height: 20cm; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,.1);">
-</div>
 <section class="py-3">
   <div class="container container-wide hero">
 
-    {{-- Slider banner lớn --}}
-    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
-      <div class="carousel-inner">
+  
+    <div id="heroCarousel"
+         class="carousel slide"
+         data-bs-ride="carousel"
+         data-bs-interval="2000">  {{--tốc độ chuyển trang--}}
+    <div class="carousel-inner">
 
         {{-- Slide 1 --}}
         <div class="carousel-item active">
+          <img src="{{ asset('images/banner.png') }}"
+               class="d-block w-100"
+               alt="Banner 1">
+        </div>
+
+        {{-- Slide 2 --}}
+        <div class="carousel-item">
+          <img src="{{ asset('images/banner2.png') }}"
+               class="d-block w-100"
+               alt="Banner 2">
+        </div>
+
+        {{-- Slide 3 --}}
+        <div class="carousel-item">
+          <img src="{{ asset('images/banner3.png') }}"
+               class="d-block w-100"
+               alt="Banner 3">
+        </div>
+        {{-- Slide 4 --}}
+        <div class="carousel-item">
+          <img src="{{ asset('images/banner4.png') }}"
+               class="d-block w-100"
+               alt="Banner 4">
+        </div>
 
       </div>
 
+      {{-- Nút control trái/phải --}}
+      <button class="carousel-control-prev" type="button"
+              data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+
+      <button class="carousel-control-next" type="button"
+              data-bs-target="#heroCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
       
+
     </div>
 
   </div>
 </section>
-</section>
-<div class="py-4" style="background:#f9f1e3;">
-    <div class="container container-wide">
-
-      <h3 class="mb-4 fw-bold">Bánh ngọt</h3>
-
-      <div class="row g-4">
-        @foreach ($products as $product)
-          <div class="col-12 col-sm-6 col-lg-3">
-            <div class="card h-100 border-0 shadow-sm">
-              <div class="ratio ratio-1x1">
-                <img src="{{ $product['image'] }}"
-                     class="card-img-top"
-                     alt="{{ $product['name'] }}"
-                     style="object-fit:cover;">
-              </div>
-
-              <div class="card-body p-0">
-                <div class="d-flex">
-                  <div class="flex-grow-1 px-3 py-2"
-                       style="background:#c7d600;color:#fff;font-weight:700;">
-                    {{ $product['price'] }}
-                  </div>
-                  <button class="btn px-3 py-2"
-                          style="background:#4a1f1b;color:#fff;border-radius:0;">
-                    <i class="bi bi-cart"></i>
-                  </button>
-                </div>
-
-                <div class="px-3 py-3">
-                  <div class="fw-bold text-uppercase small">
-                    {{ $product['name'] }}
-                  </div>
-                  @if(!empty($product['tag']))
-                    <div class="mt-1 small text-muted">
-                      {{ $product['tag'] }}
-                    </div>
-                  @endif
-                </div>
-              </div>
-            </div>
-          </div>
-        @endforeach
-      </div>
-
-    </div>
-  </div>
 
 @endsection
 

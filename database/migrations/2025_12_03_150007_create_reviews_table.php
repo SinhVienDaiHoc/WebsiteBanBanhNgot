@@ -12,10 +12,25 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('reviews', function (Blueprint $table) {
-            $table->integer('id_Reviews')->primary();
-            $table->dateTime('created_at')->nullable();
+            $table->id();
             $table->tinyInteger('rating')->nullable();
             $table->string('comment')->nullable();
+            $table->timestamps();
+
+            //=================================
+            //CÁC RÀNG BUỘC
+            //Bảng users
+            $table->foreignId('user_id')
+            ->constrained('users')
+            ->onDelete('cascade');
+
+            //Bảng products
+            $table->foreignId('product_id')
+            ->constrained('products')
+            ->onDelete('cascade');
+
+            $table->unique(['user_id','product_id']);// 1 user chỉ đánh giá 1 product 1 lần
+            //=================================
         });
     }
 

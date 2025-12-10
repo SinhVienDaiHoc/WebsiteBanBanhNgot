@@ -3,47 +3,77 @@
 @section('title', 'Tìm kiếm')
 
 @section('content')
-<section class="py-4 container container-wide">
-    <h2 class="mb-4">
-        Kết quả cho: <span class="text-danger">"{{ $keyword }}"</span>
-    </h2>
+<div class="py-4" style="background:#fbf1e0;">
+  <div class="container container-wide">
 
-    @if($products->isEmpty())
-        <p>Không tìm thấy bánh nào phù hợp.</p>
+    <h3 class="mb-3 fw-bold">
+      Kết quả tìm kiếm: "{{ $keyword }}"
+    </h3>
+
+    @if ($products->isEmpty())
+      <p>Không tìm thấy sản phẩm nào phù hợp.</p>
+      <a href="{{ route('home') }}" class="btn btn-outline-secondary btn-sm mt-2">
+        ← Quay lại trang chủ
+      </a>
     @else
-        <div class="row g-4">
-            @foreach ($products as $product)
-                <div class="col-12 col-sm-6 col-lg-3">
-                    <div class="card h-100 border-0 shadow-sm">
-                        <div class="ratio ratio-1x1">
-                            <img src="{{ $product['image'] }}"
-                                 class="card-img-top"
-                                 alt="{{ $product['name'] }}"
-                                 style="object-fit:cover;">
-                        </div>
+      <p class="text-muted small mb-3">
+        Tìm thấy {{ $products->count() }} sản phẩm.
+      </p>
 
-                        <div class="card-body d-flex flex-column p-0">
-                            <div class="px-3 py-2">
-                                <h5 class="card-title mb-1">
-                                    {{ $product['name'] }}
-                                </h5>
-                                <p class="mb-2 fw-bold text-success">
-                                    {{ $product['price'] }}
-                                </p>
-                            </div>
+      <div class="row g-4">
+        @foreach ($products as $product)
+          <div class="col-12 col-sm-6 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm">
+              <div class="ratio ratio-1x1">
+                <img src="{{ $product['image'] }}"
+                     class="card-img-top"
+                     alt="{{ $product['name'] }}"
+                     style="object-fit:cover;">
+              </div>
 
-                            <div class="mt-auto d-flex">
-                                <a href="#"
-                                   class="flex-grow-1 text-center py-2 text-decoration-none text-white"
-                                   style="background:#c7d600">
-                                    Thêm vào giỏ
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+              <div class="card-body p-0">
+
+                {{-- Giá + nút giỏ --}}
+                <div class="d-flex">
+                  <div class="flex-grow-1 px-3 py-2"
+                       style="background:#c7d600;color:#fff;font-weight:700;">
+                    {{ number_format($product['price']) }} đ
+                  </div>
+
+                  <form action="{{ route('cart.add', $product['id']) }}" method="POST" class="m-0">
+                    @csrf
+                    <input type="hidden" name="id" value="{{ $product['id'] }}">
+                    <input type="hidden" name="name" value="{{ $product['name'] }}">
+                    <input type="hidden" name="price" value="{{ $product['price'] }}">
+                    <input type="hidden" name="image" value="{{ $product['image'] }}">
+
+                    <button type="submit"
+                            class="btn px-3 py-2 h-100"
+                            style="background:#4a1f1b;color:#fff;border-radius:0;">
+                      <i class="bi bi-cart"></i>
+                    </button>
+                  </form>
                 </div>
-            @endforeach
-        </div>
+
+                <div class="px-3 py-3">
+                  <div class="fw-bold text-uppercase small">
+                    {{ $product['name'] }}
+                  </div>
+
+                  @if(!empty($product['tag']))
+                    <div class="mt-1 small text-muted">
+                      {{ $product['tag'] }}
+                    </div>
+                  @endif
+                </div>
+              </div>
+
+            </div>
+          </div>
+        @endforeach
+      </div>
     @endif
-</section>
+
+  </div>
+</div>
 @endsection

@@ -2,29 +2,57 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-
+use Illuminate\Database\Eloquent\Relations\HasOne;
 class Order extends Model
 {
-    use HasFactory;
-    protected $primaryKey = 'id_Order';
-    protected $table = 'order';
+    protected $table = 'orders';
+
     protected $fillable = [
-        'id_Order',
-        'date',
+        'user_id',
+        'voucher_id',
+        'total_amount',    
         'status',
-        'total',
-        'CUSTOMER_id_Customer',
-        'CUSTOMER_CART_id_Cart',
-        'VOUCHER_id_Voucher'
+        'shipping_address',
+        'date',
     ];
-    public function customer():BelongsTo{
-        return $this->belongsTo(Customer::class,'CUSTOMER_id_Customer','id_Customer');
+
+   //==========================================
+    //RELATIONSHIP
+    //Check lấy thông tin người dùng
+    public function user():BelongsTo{
+        return $this->belongsTo(User::class);
     }
-    public function order_item():HasMany{
+    
+    // Check order này sử dụng voucher nào để giảm giá
+    public function voucher():BelongsTo{
+        return $this->belongsTo(Voucher::class);
+    }
+
+    //Check chi tiết các sản phẩm có trong giỏ hàng
+    public function items():HasMany{
         return $this->hasMany(OrderItem::class,'ORDER_id_Order','id_Order');
     }   
+
+    
+    //Điểm thưởng tích lũy được từ đơn hàng này
+    public function pointTransactions():HasMany{
+        return $this->hasMany(Point::class);
+    }
+    
+    //==========================================
+   public function getStatusTextAttribute()
+{
+    return match ($this->status) {
+        'pending', 0 => 'Đang chờ xác nhận',
+        'processing', 1 => 'Đang chuẩn bị đơn hàng',
+        'shipping', 2 => 'Đang giao hàng',
+        'completed', 3 => 'Giao hàng thành công',
+        default => 'Không xác định',
+    };
+}
+
+
 }

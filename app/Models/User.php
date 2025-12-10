@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -23,6 +24,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',//Phân role Admin=1, customer =0
     ];
 
     /**
@@ -40,11 +42,34 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    public function customer(): HasOne
+    //=============================================
+    //KIỂM TRA ADMIN OR CUSTOMER
+    public function isAdmin(): bool
     {
-        // Liên kết tới Model Customer, tìm khóa ngoại 'user_id' trong bảng 'customer'
-        return $this->hasOne(Customer::class, 'user_id'); 
+        return $this->role === 1;
     }
+    public function isCustomer():bool{
+        return $this->role ===0;
+    }
+    //=============================================
+   
+    //RELATIONSHIP
+    public function cart():HasOne{
+        return $this->hasOne(Cart::class);
+    }
+    public function points():HasMany{
+        return $this->hasMany(Point::class);
+    }
+
+    public function redemptions():HasMany{
+        return $this->hasMany(PointsRedemption::class);
+    }
+    public function profile(): HasOne
+{
+    
+    return $this->hasOne(Profile::class);
+}
+    //===========================================================
     protected function casts(): array
     {
         return [

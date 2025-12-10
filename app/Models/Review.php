@@ -10,23 +10,24 @@ use PHPUnit\Metadata\Before;
 class Review extends Model
 {
     use HasFactory;
-    protected $primaryKey = 'id_Reviews';
     protected $table='reviews';
     protected $fillable = [
-        'created_at',
-'rating',
-'comment',
-'CUSTOMER_id_Customer',
-'PRODUCT_id_Product'
-    ];
+        'user_id',
+        'product_id',
+        'rating',
+        'comment',
 
+    ];
+    //=========================================
+    //RELATIONSHIP
 public function product():BelongsTo{
     return $this->belongsTo(Product::class,'PRODUCT_id_Product','id_Product');
 }
 
-public function customer():BelongsTo{
-    return $this->belongsTo(Customer::class,'CUSTOMER_id_Customer','id_Customer');
+public function user():BelongsTo{
+    return $this->belongsTo(User::class);
 }
 
+    //=========================================
 
 }

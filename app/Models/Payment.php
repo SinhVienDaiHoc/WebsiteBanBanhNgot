@@ -9,16 +9,20 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Payment extends Model
 {
     use HasFactory;
-    protected $primaryKey = 'id_Payment';
     protected $table='payment';
     protected $fillable = [
+        'order_id',
         'method',
         'paid_at',
         'amount'
     ];
+    
+    //==========================================
+    //RELATIONSHIP
     public function order(): HasOne
     {
-        // Giả sử mối quan hệ là 1-1 qua khóa ngoại trong bảng Payment
-        return $this->hasOne(Order::class, 'ORDER_id_Order', 'id_Order');
+                return $this->hasOne(Order::class, 'ORDER_id_Order', 'id_Order');
     }
+        //==========================================
+
 }

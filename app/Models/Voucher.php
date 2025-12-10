@@ -9,20 +9,36 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Voucher extends Model
 {
     use HasFactory;
-    protected $primaryKey = 'id_Voucher';
-    protected $table='voucher';
+    protected $table='vouchers';
     protected $fillable = [
-        'id_Voucher',
         'code',
-        'name',
-        'description',
-        'required_points',
-        'discount_amount',
         'type',
-        'status'
+        'discount_amount',
+        'min_order_amount',
+        'required_points',
+        'start_at',
+        'expires_at',
+        'is_active',      
     ];
+    
+    //Ép kiểu:
+    protected function casts(){
+        return[
+            'start_at'=>'datetime',
+            'expires_at'=>'datetime',
+            'is_active'=>'boolean',
+        ];
+    }
+
+    
+    //====================================
+    //RELATIONSHIP
+   
     public function orders(): HasMany
     {
-        return $this->hasMany(Order::class, 'VOUCHER_id_Voucher', 'id_Voucher');
+        return $this->hasMany(Order::class);
     }
+     //====================================
+
+
 }

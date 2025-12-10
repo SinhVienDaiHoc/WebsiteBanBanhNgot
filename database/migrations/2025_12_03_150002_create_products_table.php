@@ -22,20 +22,21 @@ return new class extends Migration
             $table->timestamps();
             
             //==================================================
-            //cần check kĩ
-            $table->foreignId('ADMIN_id_Admin')
-                  ->references('id_Admin') // Tham chiếu đến 'id_Admin' trong bảng 'admins'
-                  ->on('admins')
-                  ->constrained() // Cú pháp chuẩn của Laravel
-                  ->onDelete('restrict'); // Không cho xóa Admin nếu còn Product
+            //ĐÃ CHỈNH SỬA LẦN 1
+            //Khóa ngoại Categories
+            $table->unsignedBigInteger('ADMIN_id_Admin')->nullable();
+            $table->unsignedBigInteger('CATEGORIES_id_Categories')->nullable();
 
-            // Khóa ngoại liên kết với bảng CATEGORY (CATEGORY_id_Category)
-            // Giả định tên bảng là 'categories' và khóa chính là 'id_Category'
-            $table->foreignId('CATEGORY_id_Category')
-                  ->references('id_Category') // Tham chiếu đến 'id_Category' trong bảng 'categories'
-                  ->on('categories')
-                  ->constrained() // Cú pháp chuẩn của Laravel
-                  ->onDelete('cascade'); // Xóa Product nếu Category bị xóa
+
+            $table->foreignId('category_id')
+            ->constrained('categories')//chiếu vào table categories
+            ->onDelete('cascade');
+            
+
+            //Khóa ngoại User
+            $table->foreignId('user_id')
+            ->constrained('users')
+            ->onDelete('restrict');
                   //===============================================
         });
     }
