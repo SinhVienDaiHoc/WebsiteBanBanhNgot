@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="vi">
+
 <head>
     <meta charset="utf-8">
     <title>@yield('title', 'Admin') | STU Bakery</title>
@@ -146,71 +147,73 @@
         }
     </style>
 </head>
+
 <body>
-<div class="admin-wrapper">
+    <div class="admin-wrapper">
 
-    {{-- SIDEBAR --}}
-    <aside class="admin-sidebar" id="adminSidebar">
-        <div class="admin-brand">
-            <div class="admin-brand-text">ADMIN</div>
-        </div>
-
-        <nav class="admin-nav">
-            <div class="admin-nav-section-title">
-                Quản lý
+        {{-- SIDEBAR --}}
+        <aside class="admin-sidebar" id="adminSidebar">
+            <div class="admin-brand">
+                <div class="admin-brand-text">ADMIN</div>
             </div>
 
-            <a href="{{ route('admin.dashboard') }}"
-               class="admin-nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                Dashboard
-            </a>
+            <nav class="admin-nav">
+                <div class="admin-nav-section-title">
+                    Quản lý
+                </div>
 
-            <a href="#"
-               class="admin-nav-link">
-                Quản lí sản phẩm
-            </a>
+                <a href="{{ route('admin.dashboard') }}"
+                    class="admin-nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                    Dashboard
+                </a>
 
-            <a href="#"
-               class="admin-nav-link">
-                Quản lí đơn hàng
-            </a>
+                <a href="{{ route('admin.product.qlysanpham') }}"
+                    class="admin-nav-link {{ request()->routeIs('admin..product.qlysanpham') ? 'active' : '' }}">
+                    Quản lí sản phẩm
+                </a>
 
-            <a href="#"
-               class="admin-nav-link">
-                Quản lí khách hàng
-            </a>
+                <a href="#"
+                    class="admin-nav-link">
+                    Quản lí đơn hàng
+                </a>
 
-            <a href="#"
-               class="admin-nav-link">
-                Quản lí doanh thu
-            </a>
-        </nav>
+                <a href="#"
+                    class="admin-nav-link">
+                    Quản lí khách hàng
+                </a>
 
-        <div class="admin-sidebar-footer">
-            <form action="{{ route('admin.logout') }}" method="post">
-                @csrf
-                <button type="submit"
+                <a href="#"
+                    class="admin-nav-link">
+                    Quản lí danh mục
+                </a>
+            </nav>
+
+            <div class="admin-sidebar-footer">
+                <form action="{{ route('admin.logout') }}" method="post">
+                    @csrf
+                    <button type="submit"
                         class="btn btn-danger admin-logout-btn">
-                    Đăng xuất
-                </button>
-            </form>
-        </div>
-    </aside>
-
-    {{-- MAIN --}}
-    <main class="admin-main">
-        <header class="admin-topbar">
-            <div class="admin-topbar-title">
-                @yield('page_title')
+                        Đăng xuất
+                    </button>
+                </form>
             </div>
-        </header>
+        </aside>
 
-        <section class="admin-content">
-            @yield('content')
-        </section>
-    </main>
-</div>
+        {{-- MAIN --}}
+        <main class="admin-main">
+            <header class="admin-topbar">
+                <div class="admin-topbar-title">
+                    @yield('page_title')
+                </div>
+            </header>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+            <section class="admin-content">
+                @yield('content')
+            </section>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

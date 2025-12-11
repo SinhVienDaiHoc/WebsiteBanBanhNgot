@@ -10,8 +10,8 @@ use App\Http\Middleware\IsAdmin;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\UserOrderController;
-
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\AdminProductController;
 // TRANG CHỦ 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -33,8 +33,8 @@ Route::get('/search', [ProductController::class, 'search'])->name('search');
 
 // LOGIN, LOGOUT
 // Đăng kí
-Route::get('/register', [AuthController::class,'register'])->name('register');
-Route::post('/register', [AuthController::class,'postRegister'])->name('postRegister');
+Route::get('/register', [AuthController::class, 'register'])->name('register');
+Route::post('/register', [AuthController::class, 'postRegister'])->name('postRegister');
 
 // Đăng nhập
 Route::get('/dang-nhap', [AuthController::class, 'login'])->name('login');
@@ -57,7 +57,7 @@ Route::middleware(['auth', IsAdmin::class])
         Route::get('/dashboard', [AdminController::class, 'index'])
             ->name('dashboard');
     });
-Route::get('admin/warning',[AdminController::class,'warning'])->name('admin.warning');
+Route::get('admin/warning', [AdminController::class, 'warning'])->name('admin.warning');
 
 // Đăng nhập admin
 Route::get('admin/login', [AdminLoginController::class, 'showLoginForm'])->name('admin.login');
@@ -79,18 +79,29 @@ Route::middleware('auth')->group(function () {
     // Xem chi tiết đơn
     Route::get('/don-hang/{order}', [UserOrderController::class, 'show'])->name('orders.show');
 
-   
+
     Route::delete('/don-hang/{order}', [UserOrderController::class, 'destroy'])->name('orders.destroy');
 
 
     // Profile
-   Route::middleware('auth')->group(function(){
-Route::get('/profile',[ProfileController::class,'edit'])->name('profile.edit');
-Route::put('profile',[ProfileController::class,'update'])->name('profile.update');
-
-
-   });
+    Route::middleware('auth')->group(function () {
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
+    });
 });
 
+// Nhóm Route Quản lý sản phẩm
+Route::prefix('admin/products')->name('admin.product.')->group(function () {
 
+    Route::get('/', [AdminProductController::class, 'index'])->name('qlysanpham');
+    Route::get('/create', [AdminProductController::class, 'create'])->name('create');
+    Route::post('/store', [AdminProductController::class, 'store'])->name('store');
+    // 1. Route hiển thị form chỉnh sửa
+    Route::get('/edit/{id}', [AdminProductController::class, 'edit'])->name('edit');
 
+    // 2. Route xử lý Cập nhật 
+    Route::put('/update/{id}', [AdminProductController::class, 'update'])->name('update');
+
+    // 3. Route xử lý Xóa 
+    Route::delete('/delete/{id}', [AdminProductController::class, 'destroy'])->name('destroy');
+});
