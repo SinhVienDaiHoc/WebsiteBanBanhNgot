@@ -201,7 +201,7 @@
     <main class="admin-main">
         <header class="admin-topbar">
             <div class="admin-topbar-title">
-                @yield('page_title', 'Dashboard')
+                @yield('page_title')
             </div>
         </header>
 
