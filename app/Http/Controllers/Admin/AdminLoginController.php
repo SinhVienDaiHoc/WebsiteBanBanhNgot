@@ -8,32 +8,35 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminLoginController extends Controller
 {
-    // Hiển thị form đăng nhập admin
+    // Form đăng nhập admin
     public function showLoginForm()
     {
         return view('auth.admin-login');
     }
 
-    // Xử lý đăng nhập 
+    // đăng nhập admin
     public function login(Request $request)
     {
-        
-        $credentials = $request->validate([
-            'email'    => ['required', 'email'],
-            'password' => ['required'],
+        $request->validate([
+            'email'    => 'required|email',
+            'password' => 'required',
         ]);
 
-        // Thêm điều kiện role = 1 
-        $credentials['role'] = 1;   // <---set role = 1 cho tài khoản  trong DB
+        //  email + password
+        $credentials = $request->only('email', 'password');
 
-        //  nếu form có checkbox name="remember"
+        // điều kiện role = 1 (admin)
+        $credentials['role'] = 1;   // cột role trong bảng users = 1 là admin
+
+        //  form  checkbox remember
         $remember = $request->boolean('remember');
 
         if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
-            // Đăng nhập đúng -> 
-            return redirect()->intended(route('admin.dashboard'));
+            // Đăng nhập thành công -> vào dashboard 
+            return redirect()->route('admin.dashboard');
+            // hoặc: return redirect()->intended(route('admin.dashboard'));
         }
 
         // Sai tài khoản / mật khẩu / không phải admin
@@ -42,7 +45,7 @@ class AdminLoginController extends Controller
         ])->onlyInput('email');
     }
 
-    // Đăng xuất admin 
+    // Đăng xuất admin
     public function logout(Request $request)
     {
         Auth::logout();
@@ -50,6 +53,6 @@ class AdminLoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('admin.login'); // route form đăng nhập admin
+        return redirect()->route('admin.login');
     }
 }

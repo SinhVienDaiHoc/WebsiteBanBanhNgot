@@ -28,7 +28,7 @@ Route::get('/banh-ngot', [ProductController::class, 'banhngot'])
 Route::get('/banh-kem', [ProductController::class, 'banhkem'])
     ->name('category.banhkem');
 
-// 🔍 TÌM KIẾM
+// TÌM KIẾM
 Route::get('/search', [ProductController::class, 'search'])->name('search');
 
 // LOGIN, LOGOUT
@@ -63,6 +63,7 @@ Route::get('admin/warning',[AdminController::class,'warning'])->name('admin.warn
 Route::get('admin/login', [AdminLoginController::class, 'showLoginForm'])->name('admin.login');
 Route::post('admin/login', [AdminLoginController::class, 'login'])->name('admin.login.post');
 
+Route::post('admin/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
 //  THANH TOÁN 
 Route::get('/thanhtoan', [CheckoutController::class, 'show'])
     ->name('checkout.show');
@@ -90,4 +91,6 @@ Route::put('profile',[ProfileController::class,'update'])->name('profile.update'
 
    });
 });
+
+
 
