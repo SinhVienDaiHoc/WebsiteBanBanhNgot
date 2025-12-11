@@ -182,8 +182,8 @@
                     Quản lí khách hàng
                 </a>
 
-                <a href="#"
-                    class="admin-nav-link">
+                <a href="{{ route('admin.category.index') }}"
+                    class="admin-nav-link {{ request()->routeIs('admin.category.index') ? 'active' : '' }}">
                     Quản lí danh mục
                 </a>
             </nav>

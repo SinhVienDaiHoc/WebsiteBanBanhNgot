@@ -12,6 +12,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\UserOrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\AdminProductController;
+use App\Http\Controllers\Admin\AdminCategoryController;
 // TRANG CHỦ 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -104,4 +105,16 @@ Route::prefix('admin/products')->name('admin.product.')->group(function () {
 
     // 3. Route xử lý Xóa 
     Route::delete('/delete/{id}', [AdminProductController::class, 'destroy'])->name('destroy');
+});
+
+// QUẢN LÝ DANH MỤC
+Route::prefix('admin.categories')->name('admin.category.')->group(function () {
+
+    Route::get('/', [AdminCategoryController::class, 'index'])->name('index');
+    Route::get('/create', [AdminCategoryController::class, 'create'])->name('create');
+    Route::post('/store', [AdminCategoryController::class, 'store'])->name('store');
+
+    Route::delete('/delete/{id}', [AdminCategoryController::class, 'destroy'])->name('destroy');
+    Route::get('/edit/{id}', [AdminCategoryController::class, 'edit'])->name('edit');
+    Route::put('/update/{id}', [AdminCategoryController::class, 'update'])->name('update');
 });
