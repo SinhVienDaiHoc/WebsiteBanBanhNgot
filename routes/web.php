@@ -27,9 +27,12 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 // CHÍNH SÁCH
 Route::get('/chinhsach', [HomeController::class, 'chinhsach'])->name('chinhsach');
 
-// SẢN PHẨM
-Route::get('/banh-ngot', [ProductController::class, 'banhngot'])->name('category.banhngot');
-Route::get('/banh-kem', [ProductController::class, 'banhkem'])->name('category.banhkem');
+
+// SẢN PHẨM 
+Route::get('/danh-muc/{id}', [ProductController::class, 'showByCategory'])->name('category.show');
+
+
+
 
 // TÌM KIẾM
 Route::get('/search', [ProductController::class, 'search'])->name('search');
