@@ -199,7 +199,7 @@
     </div>
     <div class="offcanvas-body small">
       <ul class="list-unstyled">
-        <li><a class="dropdown-item py-2" href="{{ route('chinhsach') }}">Các chính sách của cửa hàng</a></li>
+        <li><a class="dropdown-item py-2" href="{{ route('chinhsachchung') }}">Các chính sách của cửa hàng</a></li>
 
 
         @foreach($globalCategories as $cate)

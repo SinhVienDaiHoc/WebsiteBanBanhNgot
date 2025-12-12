@@ -25,11 +25,7 @@ return new class extends Migration
             ->unique()//đảm bảo mỗi user có 1 profile
             ->constrained('users')
             ->onDelete('cascade');
-
-    
-
-            
-            //=================================
+         //=================================
         });
     }
 

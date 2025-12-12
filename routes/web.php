@@ -16,7 +16,7 @@ use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\Admin\AdminProductController;
 use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminDashboardController;
-
+use App\Http\Controllers\PolicyController;
 use App\Http\Middleware\IsAdmin;
 
 // USER ROUTES
@@ -26,6 +26,14 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // CHÍNH SÁCH
 Route::get('/chinhsach', [HomeController::class, 'chinhsach'])->name('chinhsach');
+
+//CÁC CHÍNH SÁCH CỦA CỬA HÀNG
+Route::get('/chinhsach', [PolicyController::class, 'index'])->name('chinhsach.mainchinhsach');
+Route::get('/chinhsachchung',[PolicyController::class,'chinhsachchung'])->name('chinhsachchung');
+Route::get('/chinhsachvanchuyen',[PolicyController::class,'chinhsachvanchuyen'])->name('chinhsachvanchuyen');
+Route::get('/chinhsachdoitra',[PolicyController::class,'chinhsachdoitra'])->name('chinhsachdoitra');
+Route::get('/chinhsachbaomat',[PolicyController::class,'chinhsachbaomat'])->name('chinhsachbaomat');
+Route::get('/chinhsachthanhtoan',[PolicyController::class,'chinhsachthanhtoan'])->name('chinhsachthanhtoan');
 
 
 // SẢN PHẨM 
