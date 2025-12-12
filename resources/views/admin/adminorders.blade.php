@@ -1,4 +1,4 @@
-@extends('admin.dashboard')
+@extends('admin.adminview')
 
 @section('title', 'Quản lí đơn hàng')
 @section('page_title', 'Quản lí đơn hàng')

@@ -21,11 +21,12 @@ class IsAdmin
     
         public function handle(Request $request, Closure $next): Response|RedirectResponse
     {
-        // 1. Kiểm tra User đã đăng nhập VÀ Role có phải là 1 không
-        if (Auth::check() && Auth::user()->role === 1) {
-            return $next($request); // Admin: Cho phép tiếp tục truy cập
-        }
-        
+        if (Auth::check() && (int) Auth::user()->role === 1) {
+    return $next($request);
+}
+
+return redirect()->route('home')->with('error', 'Bạn không có quyền Admin.');
+
         // 2. Không phải Admin: Đăng xuất (tăng cường bảo mật) và chuyển hướng
         if (Auth::check()) {
             Auth::logout();

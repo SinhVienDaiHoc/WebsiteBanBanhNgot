@@ -1,102 +1,123 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
-use App\Http\Controllers\Admin\AdminLoginController;
-use App\Http\Middleware\IsAdmin;
-use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\UserOrderController;
-use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\ProfileController;
-// TRANG CHỦ 
+
+use App\Http\Controllers\Admin\AdminLoginController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AdminOrderController;
+use App\Http\Controllers\Admin\AdminProductController;
+use App\Http\Controllers\Admin\AdminCategoryController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+
+use App\Http\Middleware\IsAdmin;
+
+// USER ROUTES
+
+// TRANG CHỦ
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-
-//CÁC CHÍNH SÁCH CỦA CỬA HÀNG
+// CHÍNH SÁCH
 Route::get('/chinhsach', [HomeController::class, 'chinhsach'])->name('chinhsach');
 
-// SẢN PHẨM 
-// Bánh ngọt
-Route::get('/banh-ngot', [ProductController::class, 'banhngot'])
-    ->name('category.banhngot');
-
-// Bánh kem
-Route::get('/banh-kem', [ProductController::class, 'banhkem'])
-    ->name('category.banhkem');
+// SẢN PHẨM
+Route::get('/banh-ngot', [ProductController::class, 'banhngot'])->name('category.banhngot');
+Route::get('/banh-kem', [ProductController::class, 'banhkem'])->name('category.banhkem');
 
 // TÌM KIẾM
 Route::get('/search', [ProductController::class, 'search'])->name('search');
 
-// LOGIN, LOGOUT
-// Đăng kí
-Route::get('/register', [AuthController::class,'register'])->name('register');
-Route::post('/register', [AuthController::class,'postRegister'])->name('postRegister');
+// AUTH USER
+Route::get('/register', [AuthController::class, 'register'])->name('register');
+Route::post('/register', [AuthController::class, 'postRegister'])->name('postRegister');
 
-// Đăng nhập
 Route::get('/dang-nhap', [AuthController::class, 'login'])->name('login');
 Route::post('/dang-nhap', [AuthController::class, 'postLogin'])->name('postLogin');
 
-// Đăng xuất
 Route::post('/dang-xuat', [AuthController::class, 'logout'])->name('logout');
 
-// GIỎ HÀNG 
+// GIỎ HÀNG
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
 Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
 Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
 
-//  ADMIN 
-Route::middleware(['auth', IsAdmin::class])
-    ->prefix('admin')
-    ->name('admin.')
-    ->group(function () {
-        Route::get('/dashboard', [AdminController::class, 'index'])
-            ->name('dashboard');
-    });
-Route::get('admin/warning',[AdminController::class,'warning'])->name('admin.warning');
- 
-Route::get('/admin/orders', [AdminOrderController::class, 'index'])
-        ->name('admin.orders.index');
+// THANH TOÁN
+Route::get('/thanhtoan', [CheckoutController::class, 'show'])->name('checkout.show');
+Route::post('/thanhtoan', [CheckoutController::class, 'process'])->name('checkout.process');
 
-// Đăng nhập admin
-Route::get('admin/login', [AdminLoginController::class, 'showLoginForm'])->name('admin.login');
-Route::post('admin/login', [AdminLoginController::class, 'login'])->name('admin.login.post');
-
-Route::post('admin/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
-//  THANH TOÁN 
-Route::get('/thanhtoan', [CheckoutController::class, 'show'])
-    ->name('checkout.show');
-
-Route::post('/thanhtoan', [CheckoutController::class, 'process'])
-    ->name('checkout.process');
-
-//  ĐƠN HÀNG NGƯỜI DÙNG 
+// ĐƠN HÀNG USER (cần login)
 Route::middleware('auth')->group(function () {
-    // Danh sách đơn hàng
     Route::get('/don-hang', [UserOrderController::class, 'index'])->name('orders.index');
-
-    // Xem chi tiết đơn
     Route::get('/don-hang/{order}', [UserOrderController::class, 'show'])->name('orders.show');
-
-   
     Route::delete('/don-hang/{order}', [UserOrderController::class, 'destroy'])->name('orders.destroy');
 
-
-    // Profile
-   Route::middleware('auth')->group(function(){
-Route::get('/profile',[ProfileController::class,'edit'])->name('profile.edit');
-Route::put('profile',[ProfileController::class,'update'])->name('profile.update');
-
-
-   });
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 });
-//trạng thái đơn hàng
-Route::patch('/admin/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])
-    ->name('admin.orders.updateStatus');
 
 
+
+// ADMIN AUTH ROUTES (KHÔNG LẶP)
+
+Route::get('admin/login', [AdminLoginController::class, 'showLoginForm'])->name('admin.login');
+Route::post('admin/login', [AdminLoginController::class, 'login'])->name('admin.login.post');
+Route::post('admin/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
+
+
+
+// ADMIN ROUTES
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware(['auth', IsAdmin::class])
+    ->group(function () {
+
+        // TRANG ADMIN HOME (sau khi login)
+        Route::get('/view', function () {
+            return view('admin.adminview');
+        })->name('view');
+
+        // DASHBOARD
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])
+            ->name('dashboard');
+
+        // WARNING
+        Route::get('/warning', [AdminController::class, 'warning'])->name('warning');
+
+        // ORDERS
+        Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
+        Route::patch('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])
+            ->name('orders.updateStatus');
+
+        // PRODUCTS
+        Route::prefix('products')->name('product.')->group(function () {
+            Route::get('/', [AdminProductController::class, 'index'])->name('qlysanpham');
+            Route::get('/create', [AdminProductController::class, 'create'])->name('create');
+            Route::post('/store', [AdminProductController::class, 'store'])->name('store');
+
+            Route::get('/edit/{id}', [AdminProductController::class, 'edit'])->name('edit');
+            Route::put('/update/{id}', [AdminProductController::class, 'update'])->name('update');
+
+            Route::delete('/delete/{id}', [AdminProductController::class, 'destroy'])->name('destroy');
+        });
+
+        // CATEGORIES
+        Route::prefix('categories')->name('category.')->group(function () {
+            Route::get('/', [AdminCategoryController::class, 'index'])->name('index');
+            Route::get('/create', [AdminCategoryController::class, 'create'])->name('create');
+            Route::post('/store', [AdminCategoryController::class, 'store'])->name('store');
+
+            Route::get('/edit/{id}', [AdminCategoryController::class, 'edit'])->name('edit');
+            Route::put('/update/{id}', [AdminCategoryController::class, 'update'])->name('update');
+
+            Route::delete('/delete/{id}', [AdminCategoryController::class, 'destroy'])->name('destroy');
+        });
+    });
 
