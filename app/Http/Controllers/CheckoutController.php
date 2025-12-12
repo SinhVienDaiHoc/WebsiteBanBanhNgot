@@ -13,7 +13,6 @@ class CheckoutController extends Controller
     {
         $cart = session('cart', []);
 
-        // tính tổng tiền để truyền ra view thanhtoan
         $total = 0;
         foreach ($cart as $item) {
             $total += $item['price'] * $item['quantity'];
@@ -24,58 +23,49 @@ class CheckoutController extends Controller
 
     public function process(Request $request)
     {
-        // 1. Validate form
-        $data = $request->validate([
-            'customer_name'    => ['required', 'string', 'max:255'],
-            'customer_phone'   => ['required', 'string', 'max:20'],
-            'customer_address' => ['required', 'string', 'max:255'],
-            'payment_method'   => ['required', 'in:cash,bank_transfer'],
-        ], [
-            'customer_name.required'    => 'Vui lòng nhập họ và tên.',
-            'customer_phone.required'   => 'Vui lòng nhập số điện thoại.',
-            'customer_address.required' => 'Vui lòng nhập địa chỉ nhận hàng.',
-            'payment_method.required'   => 'Vui lòng chọn phương thức thanh toán.',
-        ]);
-
-        // 2. Lấy giỏ hàng
+        // Lấy giỏ hàng từ session
         $cart = session('cart', []);
+
         if (empty($cart)) {
-            return redirect('/cart')->with('error', 'Giỏ hàng của bạn đang trống.');
+            return redirect()->route('cart.index')
+                ->with('error', 'Giỏ hàng đang trống.');
         }
 
-        // 3. Tính tổng tiền
-        $total = 0;
-        foreach ($cart as $item) {
-            $total += $item['price'] * $item['quantity'];
-        }
+        // TÍNH TỔNG TIỀN
+$total = 0;
+foreach ($cart as $item) {
+    $total += $item['price'] * $item['quantity'];
+}
 
-        // 4. Tạo đơn hàng
-        $order = Order::create([
-            'user_id'          => Auth::id(),
-            'total'            => $total,
-            'status'           => 'pending',
-            'customer_name'    => $data['customer_name'],
-            'customer_phone'   => $data['customer_phone'],
-            'customer_address' => $data['customer_address'],
-            'payment_method'   => $data['payment_method'],
-        ]);
+// TẠO ĐƠN HÀNG
+$order = \App\Models\Order::create([
+    'user_id'          => \Auth::id(),
+    'total'            => $total,            // <--- DÒNG NÀY RẤT QUAN TRỌNG
+    'status'           => 0,
+    'customer_name'    => $request->input('customer_name'),
+    'customer_phone'   => $request->input('customer_phone'),
+    'customer_address' => $request->input('customer_address'),
+    'payment_method'   => $request->input('payment_method', 'cash'),
+]);
 
-        // 5. Tạo các dòng chi tiết đơn hàng
+
+        // LƯU CÁC SẢN PHẨM TRONG ĐƠN
         foreach ($cart as $productId => $item) {
             OrderItem::create([
                 'order_id'       => $order->id,
                 'product_id'     => $productId,
-                'product_name'   => $item['name'],     
+                'product_name'   => $item['name'],
                 'quantity'       => $item['quantity'],
-                'price_at_order' => $item['price'],
+                'price_at_order' => $item['price'], 
             ]);
         }
 
-        // 6. Xoá giỏ hàng
+        // Xoá giỏ hàng
         session()->forget('cart');
 
-        // 7. QUAN TRỌNG: chuyển sang TRANG CHI TIẾT ĐƠN HÀNG
-        return redirect('/don-hang/' . $order->id)
-            ->with('success', 'Đặt hàng thành công! Cảm ơn bạn đã mua hàng.');
+        // Chuyển sang chi tiết đơn hàng
+        return redirect()
+            ->route('orders.show', $order)
+            ->with('success', 'Đặt hàng thành công!');
     }
 }

@@ -29,7 +29,7 @@
                     <tr>
                         <td>#{{ $order->id }}</td>
                         <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
-                        <td>{{ number_format($order->total_amount, 0, ',', '.') }} đ</td>
+                        <td>{{ number_format($order->total, 0, ',', '.') }} đ</td>
                         <td>{{ $order->status_text }}</td>
                         <td>
                             <a href="{{ route('orders.show', $order) }}" class="btn btn-sm btn-outline-secondary">Xem chi tiết</a>

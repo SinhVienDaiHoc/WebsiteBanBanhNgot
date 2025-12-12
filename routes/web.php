@@ -10,7 +10,7 @@ use App\Http\Middleware\IsAdmin;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\UserOrderController;
-
+use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\ProfileController;
 // TRANG CHỦ 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -58,6 +58,9 @@ Route::middleware(['auth', IsAdmin::class])
             ->name('dashboard');
     });
 Route::get('admin/warning',[AdminController::class,'warning'])->name('admin.warning');
+ 
+Route::get('/admin/orders', [AdminOrderController::class, 'index'])
+        ->name('admin.orders.index');
 
 // Đăng nhập admin
 Route::get('admin/login', [AdminLoginController::class, 'showLoginForm'])->name('admin.login');
@@ -91,6 +94,9 @@ Route::put('profile',[ProfileController::class,'update'])->name('profile.update'
 
    });
 });
+//trạng thái đơn hàng
+Route::patch('/admin/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])
+    ->name('admin.orders.updateStatus');
 
 
 

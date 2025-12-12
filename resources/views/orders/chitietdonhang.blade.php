@@ -3,7 +3,6 @@
 @section('title', 'Chi tiết đơn hàng')
 
 @section('content')
-
 <div class="py-4" style="background:#fbf1e0;">
   <div class="container container-wide">
 
@@ -18,6 +17,11 @@
         {{ $order->payment_method == 'bank_transfer' ? 'Chuyển khoản' : 'Tiền mặt' }}
     </p>
 
+    @php
+        $calculatedTotal = $order->items->sum('subtotal');
+        $totalToShow = $calculatedTotal ?: $order->total;
+    @endphp
+
     <h5 class="mt-4">Sản phẩm</h5>
     <table class="table bg-white">
         <thead>
@@ -28,23 +32,26 @@
                 <th>Thành tiền</th>
             </tr>
         </thead>
-       <tbody>
-    @foreach($order->items as $item)
-        <tr>
-            <td>{{ $item->product_name }}</td>
-            <td>{{ number_format($item->price_at_order, 0, ',', '.') }} đ</td>
-            <td>{{ $item->quantity }}</td>
-            <td>{{ number_format($item->subtotal, 0, ',', '.') }} đ</td>
-        </tr>
-    @endforeach
-</tbody>
 
-
+        <tbody>
+        @forelse ($order->items as $item)
+            <tr>
+                <td>{{ $item->product_name }}</td>
+                <td>{{ number_format($item->price_at_order, 0, ',', '.') }} đ</td>
+                <td>{{ $item->quantity }}</td>
+                <td>{{ number_format($item->subtotal, 0, ',', '.') }} đ</td>
+            </tr>
+        @empty
+            <tr>
+                <td colspan="4" class="text-center py-3">
+                    Không có sản phẩm nào trong đơn hàng.
+                </td>
+            </tr>
+        @endforelse
+        </tbody>
     </table>
 
-    <p class="fw-bold mt-3">
-        Tổng cộng: {{ number_format($order->total, 0, ',', '.') }} đ
-    </p>
+    <p><strong>Tổng cộng:</strong> {{ number_format($totalToShow, 0, ',', '.') }} đ</p>
 
   </div>
 </div>

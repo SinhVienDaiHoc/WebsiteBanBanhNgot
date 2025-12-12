@@ -65,6 +65,10 @@
             padding: 0 .75rem;
         }
 
+ 
+             .admin-content {
+              margin-left: 260px;
+             } 
 
         .admin-nav-link {
             display: block;
@@ -102,6 +106,17 @@
             display: flex;
             flex-direction: column;
         }
+
+        .admin-sidebar {
+              position: fixed;
+              top: 0;
+             left: 0;
+             height: 100vh; 
+              width: 260px; 
+                overflow-y: auto; 
+             z-index: 1000;
+}
+
 
         .admin-topbar {
             height: 64px;
@@ -170,10 +185,11 @@
                 Quản lí sản phẩm
             </a>
 
-            <a href="#"
-               class="admin-nav-link">
-                Quản lí đơn hàng
+            <a href="{{ route('admin.orders.index') }}"
+               class="admin-nav-link {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}">
+              Quản lí đơn hàng
             </a>
+
 
             <a href="#"
                class="admin-nav-link">
@@ -187,14 +203,14 @@
         </nav>
 
         <div class="admin-sidebar-footer">
-            <form action="{{ route('admin.logout') }}" method="post">
-                @csrf
-                <button type="submit"
-                        class="btn btn-danger admin-logout-btn">
-                    Đăng xuất
-                </button>
-            </form>
-        </div>
+    <form action="{{ route('admin.logout') }}" method="post">
+        @csrf
+        <button type="submit" class="btn btn-danger admin-logout-btn">
+            Đăng xuất
+        </button>
+    </form>
+</div>
+
     </aside>
 
     {{-- MAIN --}}
