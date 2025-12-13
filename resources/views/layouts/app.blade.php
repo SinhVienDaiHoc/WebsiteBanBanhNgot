@@ -135,9 +135,18 @@
 
               @auth
               {{-- Khi ĐÃ đăng nhập --}}
-              <li class="dropdown-item text-dark fw-bold">
+              <li class="dropdown-item text-dark fw-bold d-flex align-items-center gap-2">
                 👤 {{ Auth::user()->name }}
-              </li>
+                <span class="badge bg-warning text-dark">
+        @php
+            $points = \Illuminate\Support\Facades\DB::table('points')
+                ->where('user_id', Auth::id())
+                ->sum('points');
+        @endphp
+        {{ $points }} điểm
+    </span>
+</li>
+
               <li><a class="dropdown-item" href="{{ url('/profile') }}">Hồ sơ</a></li>
               <li><a class="dropdown-item" href="{{ url('/don-hang') }}">Đơn hàng</a></li>
 
