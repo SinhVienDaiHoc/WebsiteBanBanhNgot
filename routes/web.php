@@ -70,8 +70,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/don-hang/{order}', [UserOrderController::class, 'show'])->name('orders.show');
     Route::delete('/don-hang/{order}', [UserOrderController::class, 'destroy'])->name('orders.destroy');
 
+    //PROFILE
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/password', [ProfileController::class, 'changePassword'])->name('user-password.update');
 });
 
 
