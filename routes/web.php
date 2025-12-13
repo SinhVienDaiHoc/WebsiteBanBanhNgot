@@ -40,7 +40,8 @@ Route::get('/chinhsachthanhtoan', [PolicyController::class, 'chinhsachthanhtoan'
 Route::get('/danh-muc/{id}', [ProductController::class, 'showByCategory'])->name('category.show');
 
 
-
+// Route xem chi tiết sản phẩm (nhận vào ID)
+Route::get('/san-pham/{id}', [ProductController::class, 'detail'])->name('product.detail');
 
 // TÌM KIẾM
 Route::get('/search', [ProductController::class, 'search'])->name('search');

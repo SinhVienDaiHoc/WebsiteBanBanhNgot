@@ -30,4 +30,18 @@ class ProductController extends Controller
 
         return view('search', compact('products', 'keyword'));
     }
+
+    /**
+     * Xem chi tiết 1 sản phẩm
+     */
+    public function detail($id)
+    {
+        $product = Product::findOrFail($id);
+        $relatedProducts = Product::where('category_id', $product->category_id)
+            ->where('id', '!=', $id) 
+            ->inRandomOrder()        
+            ->take(4)              
+            ->get();
+        return view('product.detail', compact('product', 'relatedProducts'));
+    }
 }

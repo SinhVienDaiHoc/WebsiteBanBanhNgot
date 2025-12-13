@@ -20,11 +20,12 @@
             <div class="col-12 col-sm-6 col-lg-3">
                 <div class="card h-100 border-0 shadow-sm">
                     <div class="ratio ratio-1x1">
-
-                        <img src="{{ asset('uploads/products/'.$product->image_cover) }}"
-                            class="card-img-top"
-                            alt="{{ $product->name }}"
-                            style="object-fit:cover;">
+                        <a href="{{ route('product.detail', $product->id) }}">
+                            <img src="{{ asset('uploads/products/'.$product->image_cover) }}"
+                                class="card-img-top"
+                                alt="{{ $product->name }}"
+                                style="object-fit:cover;">
+                        </a>
                     </div>
 
                     <div class="card-body p-0">
