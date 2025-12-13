@@ -13,6 +13,7 @@ class Profile extends Model
         'phone_number',
         'date_of_birth',
         'gender',
+        'address',
     ];
     public function user():BelongsTo{
         return $this->belongsTo(User::class);
