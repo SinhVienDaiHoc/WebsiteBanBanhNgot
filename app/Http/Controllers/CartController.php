@@ -22,17 +22,19 @@ class CartController extends Controller
     }
 
     // Thêm sản phẩm vào giỏ
-    public function add($id)
+    public function add(Request $request, $id)
     {
         $product = Product::findOrFail($id);
         $cart = session()->get('cart', []);
 
+        $qty = $request->input('quantity', 1);
+
         if (isset($cart[$id])) {
-            $cart[$id]['quantity']++;
+            $cart[$id]['quantity'] += $qty;
         } else {
             $cart[$id] = [
                 "name" => $product->name,
-                "quantity" => 1,
+                "quantity" => $qty,
                 "price" => $product->price,
                 "image" => $product->image_cover
             ];
@@ -50,7 +52,7 @@ class CartController extends Controller
             $cart = session()->get('cart');
             $cart[$request->id]["quantity"] = $request->quantity;
             session()->put('cart', $cart);
-            session()->flash('success', 'Đã cập nhật số lượng!');
+            return redirect()->back()->with('success', 'Đã cập nhật số lượng!');
         }
     }
 
@@ -63,7 +65,7 @@ class CartController extends Controller
                 unset($cart[$request->id]);
                 session()->put('cart', $cart);
             }
-            session()->flash('success', 'Đã xóa sản phẩm khỏi giỏ!');
+            return redirect()->back()->with('success', 'Đã xóa sản phẩm khỏi giỏ!');
         }
     }
 }
