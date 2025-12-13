@@ -29,6 +29,7 @@
                     <th>Danh mục</th>
                     <th>Giá bán</th>
                     <th>Tồn kho</th>
+                    <th>Điểm thưởng</th>
                     <th class="text-end">Hành động</th>
                 </tr>
             </thead>
@@ -54,6 +55,7 @@
                         <span class="badge bg-secondary">Hết hàng</span>
                         @endif
                     </td>
+                    <td class="fw-bold">{{ $sp->reward_point }}</td>
                     <td class="text-end">
 
                         <a href="{{ route('admin.product.edit', $sp->id) }}" class="btn btn-sm btn-outline-primary" title="Sửa">

@@ -29,11 +29,11 @@ Route::get('/chinhsach', [HomeController::class, 'chinhsach'])->name('chinhsach'
 
 //CÁC CHÍNH SÁCH CỦA CỬA HÀNG
 Route::get('/chinhsach', [PolicyController::class, 'index'])->name('chinhsach.mainchinhsach');
-Route::get('/chinhsachchung',[PolicyController::class,'chinhsachchung'])->name('chinhsachchung');
-Route::get('/chinhsachvanchuyen',[PolicyController::class,'chinhsachvanchuyen'])->name('chinhsachvanchuyen');
-Route::get('/chinhsachdoitra',[PolicyController::class,'chinhsachdoitra'])->name('chinhsachdoitra');
-Route::get('/chinhsachbaomat',[PolicyController::class,'chinhsachbaomat'])->name('chinhsachbaomat');
-Route::get('/chinhsachthanhtoan',[PolicyController::class,'chinhsachthanhtoan'])->name('chinhsachthanhtoan');
+Route::get('/chinhsachchung', [PolicyController::class, 'chinhsachchung'])->name('chinhsachchung');
+Route::get('/chinhsachvanchuyen', [PolicyController::class, 'chinhsachvanchuyen'])->name('chinhsachvanchuyen');
+Route::get('/chinhsachdoitra', [PolicyController::class, 'chinhsachdoitra'])->name('chinhsachdoitra');
+Route::get('/chinhsachbaomat', [PolicyController::class, 'chinhsachbaomat'])->name('chinhsachbaomat');
+Route::get('/chinhsachthanhtoan', [PolicyController::class, 'chinhsachthanhtoan'])->name('chinhsachthanhtoan');
 
 
 // SẢN PHẨM 
@@ -57,8 +57,8 @@ Route::post('/dang-xuat', [AuthController::class, 'logout'])->name('logout');
 // GIỎ HÀNG
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
-Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
-Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
 
 // THANH TOÁN
 Route::get('/thanhtoan', [CheckoutController::class, 'show'])->name('checkout.show');
@@ -133,4 +133,3 @@ Route::prefix('admin')
             Route::delete('/delete/{id}', [AdminCategoryController::class, 'destroy'])->name('destroy');
         });
     });
-

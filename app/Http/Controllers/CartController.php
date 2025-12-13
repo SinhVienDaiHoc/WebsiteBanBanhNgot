@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Product;
 
 class CartController extends Controller
 {
@@ -16,55 +17,53 @@ class CartController extends Controller
             $total += $item['price'] * $item['quantity'];
         }
 
-       
+
         return view('cart.giohang', compact('cart', 'total'));
     }
 
     // Thêm sản phẩm vào giỏ
-    public function add(Request $request, $id)
+    public function add($id)
     {
-        // Lấy giỏ hàng hiện tại trong session
+        $product = Product::findOrFail($id);
         $cart = session()->get('cart', []);
 
         if (isset($cart[$id])) {
-            $cart[$id]['quantity'] += 1;
+            $cart[$id]['quantity']++;
         } else {
             $cart[$id] = [
-                'name'     => $request->name ?? 'Sản phẩm',
-                'price'    => $request->price ?? 0,
-                'quantity' => 1,
+                "name" => $product->name,
+                "quantity" => 1,
+                "price" => $product->price,
+                "image" => $product->image_cover
             ];
         }
 
         session()->put('cart', $cart);
-        return redirect()->back()
-            ->with('cart_success', 'Đã thêm vào giỏ hàng');
+        return redirect()->back()->with('cart_success', 'Đã thêm ' . $product->name . ' vào giỏ!');
     }
 
 
     // Cập nhật số lượng
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $cart = session()->get('cart', []);
-
-        if (isset($cart[$id])) {
-            $cart[$id]['quantity'] = max(1, (int) $request->quantity);
+        if ($request->id && $request->quantity) {
+            $cart = session()->get('cart');
+            $cart[$request->id]["quantity"] = $request->quantity;
             session()->put('cart', $cart);
+            session()->flash('success', 'Đã cập nhật số lượng!');
         }
-
-        return redirect()->route('cart.index');
     }
 
     // Xoá 1 sản phẩm khỏi giỏ
-    public function remove($id)
+    public function remove(Request $request)
     {
-        $cart = session()->get('cart', []);
-
-        if (isset($cart[$id])) {
-            unset($cart[$id]);
-            session()->put('cart', $cart);
+        if ($request->id) {
+            $cart = session()->get('cart');
+            if (isset($cart[$request->id])) {
+                unset($cart[$request->id]);
+                session()->put('cart', $cart);
+            }
+            session()->flash('success', 'Đã xóa sản phẩm khỏi giỏ!');
         }
-
-        return redirect()->route('cart.index');
     }
 }
