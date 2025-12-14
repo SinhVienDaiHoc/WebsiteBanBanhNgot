@@ -6,6 +6,22 @@
 <div class="container py-4">
     <h3 class="mb-4 fw-bold text-uppercase border-bottom pb-2">Giỏ hàng của bạn</h3>
 
+    {{-- THÔNG BÁO --}}
+    @if(session('error'))
+    <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+
+    @if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+
+
     @if (empty($cart) || count($cart) == 0)
     <div class="text-center py-5">
         <i class="bi bi-cart-x display-1 text-muted"></i>
