@@ -21,7 +21,7 @@ use App\Http\Controllers\PolicyController;
 use App\Http\Middleware\IsAdmin;
 use App\Http\Controllers\Admin\AdminVoucherController;
 use App\Http\Controllers\Admin\UserController;
-
+use App\Http\Controllers\ReviewController;
 
 
 
@@ -90,17 +90,17 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/doi-voucher/{voucher}', [VoucherExchangeController::class, 'exchange'])->name('voucher.exchange.exchange');
 });
 
-    //Checkout
-    Route::post('/apply-voucher', [CheckoutController::class, 'applyVoucher'])->name('checkout.applyVoucher');
-    Route::post('/remove-voucher', [CheckoutController::class, 'removeVoucher'])->name('checkout.removeVoucher');
+//Checkout
+Route::post('/apply-voucher', [CheckoutController::class, 'applyVoucher'])->name('checkout.applyVoucher');
+Route::post('/remove-voucher', [CheckoutController::class, 'removeVoucher'])->name('checkout.removeVoucher');
 
 
 ////=========================================
 Route::get('/my-vouchers/{userVoucher}', [\App\Http\Controllers\UserVoucherController::class, 'show'])
     ->name('user.vouchers.show');
-    Route::get('/my-vouchers', [\App\Http\Controllers\UserVoucherController::class, 'index'])
+Route::get('/my-vouchers', [\App\Http\Controllers\UserVoucherController::class, 'index'])
     ->name('user-voucher.index');
-    
+
 ////=========================================
 
 // ADMIN AUTH ROUTES (KHÔNG LẶP)
@@ -118,18 +118,18 @@ Route::prefix('admin')
     ->group(function () {
 
 
-//QUẢN LÍ USER
-   Route::prefix('user')->name('user.')->group(function () {
-            
+        //QUẢN LÍ USER
+        Route::prefix('user')->name('user.')->group(function () {
+
             //  Danh sách User (INDEX)
             Route::get('/', [UserController::class, 'index'])
-                 ->name('index'); // Tên Route: admin.user.index
+                ->name('index'); // Tên Route: admin.user.index
 
             // Chi tiết User (SHOW)
-            Route::get('/{user}', [UserController::class, 'show']) 
-                 ->name('show'); // Tên Route: admin.user.show
-            
-    
+            Route::get('/{user}', [UserController::class, 'show'])
+                ->name('show'); // Tên Route: admin.user.show
+
+
         });
 
 
@@ -177,27 +177,21 @@ Route::prefix('admin')
 
         //VOUCHER
         Route::prefix('voucher')->name('voucher.')->group(function () {
-    // Hiển thị danh sách Vouchers
-    Route::get('/', [AdminVoucherController::class, 'index'])->name('index');
-    
-    // Thêm các route CRUD (Tạo, Sửa, Xóa) khác nếu cần
-    Route::get('/create', [AdminVoucherController::class, 'create'])->name('create');
-    Route::post('/store', [AdminVoucherController::class, 'store'])->name('store');
-    
-    Route::get('/edit/{id}', [AdminVoucherController::class, 'edit'])->name('edit');
-    Route::put('/update/{id}', [AdminVoucherController::class, 'update'])->name('update');
-    
-    Route::delete('/delete/{id}', [AdminVoucherController::class, 'destroy'])->name('destroy');
+            // Hiển thị danh sách Vouchers
+            Route::get('/', [AdminVoucherController::class, 'index'])->name('index');
 
-    Route::get('/{voucher}/stats', [AdminVoucherController::class, 'stats'])->name('stats');//thống kê
-          
+            // Thêm các route CRUD (Tạo, Sửa, Xóa) khác nếu cần
+            Route::get('/create', [AdminVoucherController::class, 'create'])->name('create');
+            Route::post('/store', [AdminVoucherController::class, 'store'])->name('store');
+
+            Route::get('/edit/{id}', [AdminVoucherController::class, 'edit'])->name('edit');
+            Route::put('/update/{id}', [AdminVoucherController::class, 'update'])->name('update');
+
+            Route::delete('/delete/{id}', [AdminVoucherController::class, 'destroy'])->name('destroy');
+
+            Route::get('/{voucher}/stats', [AdminVoucherController::class, 'stats'])->name('stats'); //thống kê
+
         });
-
-
- 
-
     });
-
-
-
-
+// Route lưu đánh giá
+Route::post('/review/store', [ReviewController::class, 'store'])->name('review.store');

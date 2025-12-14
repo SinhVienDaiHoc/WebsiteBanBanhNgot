@@ -9,47 +9,49 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
-   use HasFactory;
+  use HasFactory;
 
-public $timestamps = true;
-    protected $table = 'products'; 
+  public $timestamps = true;
+  protected $table = 'products';
   protected $fillable = [
-        'name',
-        'price',
-        'stock',
-        'description',
-        'image_cover',
-        'reward_point',
-        'user_id',
-        'category_id',
-    ];
+    'name',
+    'price',
+    'stock',
+    'description',
+    'image_cover',
+    'reward_point',
+    'user_id',
+    'category_id',
+  ];
 
-//========================================
-    //RELATIONSHIP
+  //========================================
+  //RELATIONSHIP
 
-    public function category(): BelongsTo
-    {
-        // Category Model, Khóa ngoại trong bảng Product (cột hiện tại), Khóa chính trong bảng Category
-        return $this->belongsTo(Category::class, 'category_id', 'id');
-    }
-    // Đặt tên là creator đúng ngữ cảnh cho dễ bảo tri
- public function creator():BelongsTo{
-    return $this->belongsTo(User::class,'user_id');
-   }
-   
+  public function category(): BelongsTo
+  {
+    // Category Model, Khóa ngoại trong bảng Product (cột hiện tại), Khóa chính trong bảng Category
+    return $this->belongsTo(Category::class, 'category_id', 'id');
+  }
+  // Đặt tên là creator đúng ngữ cảnh cho dễ bảo tri
+  public function creator(): BelongsTo
+  {
+    return $this->belongsTo(User::class, 'user_id');
+  }
 
-    public function orderItems():HasMany{
+
+  public function orderItems(): HasMany
+  {
     return $this->hasMany(OrderItem::class);
   }
 
-  public function reviews():HasMany{
-    return $this->hasMany(Review::class,'PRODUCT_id_Product','id_Product');
+  public function reviews(): HasMany
+  {
+    return $this->hasMany(Review::class, 'product_id', 'id');
   }
   //========================================
-//URL của image
+  //URL của image
   public function getImageAttribute()
-    {
-        return $this->image_cover;
-    }
-
+  {
+    return $this->image_cover;
+  }
 }

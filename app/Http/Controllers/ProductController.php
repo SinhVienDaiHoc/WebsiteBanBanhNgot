@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Order;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
@@ -38,10 +40,32 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         $relatedProducts = Product::where('category_id', $product->category_id)
-            ->where('id', '!=', $id) 
-            ->inRandomOrder()        
-            ->take(4)              
+            ->where('id', '!=', $id)
+            ->inRandomOrder()
+            ->take(4)
             ->get();
-        return view('product.detail', compact('product', 'relatedProducts'));
+
+        $can_review = false;
+        if (Auth::check()) {
+            $user_id = Auth::id();
+
+            $hasPurchased = Order::where('user_id', $user_id)
+                ->whereHas('items', function ($query) use ($id) {
+                    $query->where('product_id', $id);
+                })
+                ->where('status', '3')
+                ->exists();
+
+
+            $hasReviewed = $product->reviews()->where('user_id', $user_id)->exists();
+
+
+            if ($hasPurchased && !$hasReviewed) {
+                $can_review = true;
+            }
+        }
+
+
+        return view('product.detail', compact('product', 'relatedProducts', 'can_review'));
     }
 }

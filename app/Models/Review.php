@@ -21,7 +21,7 @@ class Review extends Model
     //=========================================
     //RELATIONSHIP
 public function product():BelongsTo{
-    return $this->belongsTo(Product::class,'PRODUCT_id_Product','id_Product');
+        return $this->belongsTo(Product::class, 'product_id', 'id');
 }
 
 public function user():BelongsTo{

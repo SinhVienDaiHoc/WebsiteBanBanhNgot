@@ -74,7 +74,99 @@
             </div>
         </div>
 
+        {{-- Form đánh giá --}}
+        <div class="p-3 bg-light rounded">
+            <h6 class="fw-bold mb-3 text-center">Gửi đánh giá của bạn</h6>
 
+            @auth
+            @if($can_review)
+            {{-- TRƯỜNG HỢP 1: Đã mua hàng & Chưa đánh giá -> Hiện Form --}}
+            <form action="{{ route('review.store') }}" method="POST">
+                @csrf
+                <input type="hidden" name="product_id" value="{{ $product->id }}">
+
+                <div class="mb-3">
+                    <label class="form-label small text-muted">Mức độ hài lòng:</label>
+                    <select name="rating" class="form-select form-select-sm text-warning fw-bold border-warning">
+                        <option value="5">⭐⭐⭐⭐⭐ (Tuyệt vời)</option>
+                        <option value="4">⭐⭐⭐⭐ (Hài lòng)</option>
+                        <option value="3">⭐⭐⭐ (Bình thường)</option>
+                        <option value="2">⭐⭐ (Thất vọng)</option>
+                        <option value="1">⭐ (Tệ)</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <textarea name="comment" class="form-control form-control-sm" rows="3" placeholder="Bánh có ngon không?..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-warning w-100 fw-bold text-white">Gửi đánh giá</button>
+            </form>
+            @else
+            {{-- TRƯỜNG HỢP 2: Đã đăng nhập nhưng KHÔNG được đánh giá --}}
+            <div class="text-center py-3 text-muted">
+                @if($product->reviews()->where('user_id', Auth::id())->exists())
+                <i class="bi bi-check-circle-fill text-success fs-1 mb-2"></i>
+                <p class="small mb-0">Bạn đã đánh giá sản phẩm này rồi.</p>
+                @else
+                <i class="bi bi-cart-x fs-1 mb-2"></i>
+                <p class="small mb-0">Bạn cần <b>mua sản phẩm này</b> để viết đánh giá.</p>
+                @endif
+            </div>
+            @endif
+            @else
+            {{-- TRƯỜNG HỢP 3: Chưa đăng nhập --}}
+            <div class="text-center py-3">
+                <p class="small text-muted mb-2">Đăng nhập và mua hàng để đánh giá</p>
+                <a href="{{ route('login') }}" class="btn btn-outline-primary btn-sm px-4">Đăng nhập</a>
+            </div>
+            @endauth
+        </div>
+
+        {{-- === PHẦN ĐÁNH GIÁ SẢN PHẨM === --}}
+        <div class="card shadow-sm border-0 mb-5 mt-4">
+            <div class="card-header bg-white fw-bold py-3 text-uppercase border-bottom">
+                ⭐ Đánh giá & Nhận xét từ khách hàng
+            </div>
+            @if($product->reviews->count() > 0)
+            <div class="review-list" style="max-height: 400px; overflow-y: auto;">
+                @foreach($product->reviews as $review)
+                <div class="d-flex mb-4 border-bottom pb-3">
+                    {{-- Avatar chữ cái --}}
+                    <div class="flex-shrink-0 me-3">
+                        <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-white fw-bold" style="width: 45px; height: 45px;">
+                            {{ substr($review->user->name ?? 'A', 0, 1) }}
+                        </div>
+                    </div>
+
+                    <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <h6 class="fw-bold mb-0">{{ $review->user->name ?? 'Người dùng ẩn danh' }}</h6>
+                            <small class="text-muted" style="font-size: 0.8rem;">
+                                {{ $review->created_at->format('d/m/Y H:i') }}
+                            </small>
+                        </div>
+
+                        <div class="text-warning small mb-2">
+                            @for($i=1; $i<=5; $i++)
+                                <i class="bi bi-star{{ $i <= $review->rating ? '-fill' : '' }}"></i>
+                                @endfor
+                        </div>
+
+                        <p class="mb-0 text-dark" style="font-size: 0.95rem;">
+                            {{ $review->comment }}
+                        </p>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+            @else
+            <div class="text-center py-5 text-muted border border-dashed rounded bg-light">
+                <i class="bi bi-chat-square-quote display-4 mb-3 d-block text-secondary"></i>
+                Chưa có đánh giá nào. Hãy là người đầu tiên!
+            </div>
+            @endif
+        </div>
 
         <div class="mt-5">
             <h4 class="fw-bold mb-4 text-uppercase border-start border-4 border-danger ps-3">

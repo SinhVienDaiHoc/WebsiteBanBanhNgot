@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Voucher;
 use App\Models\Profile;
 use App\Models\Payment;
+use App\Models\Product;
+
 class CheckoutController extends Controller
 {
     public function show()
@@ -21,29 +23,29 @@ class CheckoutController extends Controller
         }
         //==================================================
         //Lấy thông tin từ profile
-            $user = Auth::user();
+        $user = Auth::user();
         $profile = $user->profile ?? null;
-        return view('checkout.thanhtoan', compact('total','profile'));
+        return view('checkout.thanhtoan', compact('total', 'profile'));
     }
 
     public function process(Request $request)
     {
-        $order = null;//khởi tạo
+        $order = null; //khởi tạo
         $user = Auth::user();
 
-    // Lấy profile, có thể là null
-    $profile = $user->profile;
+        // Lấy profile, có thể là null
+        $profile = $user->profile;
 
 
 
-    if (!$profile) {
+        if (!$profile) {
             $profile = Profile::create([
                 'user_id' => $user->id,
                 'full_name' => $request->input('customer_name', $user->name ?? 'Người dùng mới'),
                 'phone_number' => $request->input('customer_phone', null),
                 'address' => $request->input('customer_address', null),
             ]);
-            $user->profile = $profile;; 
+            $user->profile = $profile;;
         }
         // Lấy giỏ hàng từ session
         $cart = session('cart', []);
@@ -53,11 +55,20 @@ class CheckoutController extends Controller
                 ->with('error', 'Giỏ hàng đang trống.');
         }
 
+        // === KIỂM TRA TỒN KHO  ===
+        foreach ($cart as $id => $item) {
+            $product = Product::find($id);
+            if (!$product || $product->stock < $item['quantity']) {
+                return redirect()->route('cart.index')
+                    ->with('error', 'Xin lỗi, sản phẩm "' . $item['name'] . '" hiện chỉ còn ' . $product->stock . ' cái. Vui lòng cập nhật lại số lượng!');
+            }
+        }
+
         // TÍNH TỔNG TIỀN ( ko có voucher)
-$total = 0;
-foreach ($cart as $item) {
-    $total += $item['price'] * $item['quantity'];
-}
+        $total = 0;
+        foreach ($cart as $item) {
+            $total += $item['price'] * $item['quantity'];
+        }
         //TÍNH TỔNG TIỀN ( có voucher)
         $finalTotal = $total;
         $voucherId = null;
@@ -70,7 +81,7 @@ foreach ($cart as $item) {
 
         //LOGIC XỬ LÍ VOUCHER
         $voucherCode = $request->input('voucher_code');
-        
+
         if (!empty($voucherCode)) {
             $voucher = Voucher::where('code', $voucherCode)->where('is_active', true)->first();
 
@@ -89,7 +100,7 @@ foreach ($cart as $item) {
 
             //Kiểm tra giới hạn sử dụng
             if ($voucher->max_usage_count <= $voucher->orders()->count()) {
-                 return back()->withInput()->with('error', 'Mã giảm giá đã hết lượt sử dụng.');
+                return back()->withInput()->with('error', 'Mã giảm giá đã hết lượt sử dụng.');
             }
 
             //Tính toán giảm giá
@@ -106,25 +117,25 @@ foreach ($cart as $item) {
             session()->flash('discount', $discountAmount);
             $request->session()->flash('success', 'Đã áp dụng mã giảm giá thành công. Bạn được giảm: ' . number_format($discountAmount, 0, ',', '.') . ' đ');
         }
-            //Xử lí PAYMENT
-            $paymentMethod = $request->input('payment_method', 'cash'); 
+        //Xử lí PAYMENT
+        $paymentMethod = $request->input('payment_method', 'cash');
         $paymentStatus = ($paymentMethod === 'cash') ? 'success' : 'pending';
 
 
-    // TẠO ĐƠN HÀNG
-    $order = \App\Models\Order::create([
-        'user_id'          => Auth::id(),
-        'total'            => $finalTotal,            // <--- DÒNG NÀY RẤT QUAN TRỌNG
-        'status'           => 0,
-       'shipping_address' => $request->input('customer_address', optional($profile)->address),
-       'voucher_id'         =>$voucherId,
-    ]);
-        
+        // TẠO ĐƠN HÀNG
+        $order = \App\Models\Order::create([
+            'user_id'          => Auth::id(),
+            'total'            => $finalTotal,            // <--- DÒNG NÀY RẤT QUAN TRỌNG
+            'status'           => 0,
+            'shipping_address' => $request->input('customer_address', optional($profile)->address),
+            'voucher_id'         => $voucherId,
+        ]);
+
         Payment::create([ // <<<--- TẠO BẢN GHI TRONG BẢNG PAYMENTS
             'order_id'       => $order->id, // Liên kết khóa ngoại
             'payment_method' => $paymentMethod,
             'amount'         => $finalTotal,
-            'status'         => $paymentStatus, 
+            'status'         => $paymentStatus,
             'paid_at'        => ($paymentStatus === 'success') ? now() : null,
         ]);
 
@@ -136,9 +147,18 @@ foreach ($cart as $item) {
                 'order_id'       => $order->id,
                 'product_id'     => $productId,
                 'quantity'       => $item['quantity'],
-                'price_at_order' => $item['price'], 
+                'price_at_order' => $item['price'],
             ]);
         }
+
+        $product = Product::find($productId);
+        if ($product) {
+            if ($product->stock >= $item['quantity']) {
+                $product->decrement('stock', $item['quantity']);
+            }
+        }
+
+
 
         // Xoá giỏ hàng
         session()->forget('cart');
