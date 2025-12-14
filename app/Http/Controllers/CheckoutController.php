@@ -81,10 +81,25 @@ class CheckoutController extends Controller
         $profile->save();
 
         //LOGIC XỬ LÍ VOUCHER
-        $voucherCode = $request->input('voucher_code');
-
+        $voucherCode = trim($request->input('voucher_code'));
+        $voucher = null;
+        $userVoucher = null;
         if (!empty($voucherCode)) {
-            $voucher = Voucher::where('code', $voucherCode)->where('is_active', true)->first();
+
+            $userVoucher = \Illuminate\Support\Facades\DB::table('user_vouchers')
+                ->where('code', $voucherCode)
+                ->where('user_id', Auth::id())
+                ->whereNull('used_at')
+                ->first();
+            if ($userVoucher) {
+                $voucher = Voucher::where('id', $userVoucher->voucher_id)
+                    ->where('is_active', true)
+                    ->first();
+            } else {
+                $voucher = Voucher::where('code', $voucherCode)
+                    ->where('is_active', true)
+                    ->first();
+            }
 
             if (!$voucher) {
                 return back()->withInput()->with('error', 'Mã giảm giá không tồn tại hoặc không hoạt động.');
@@ -99,9 +114,9 @@ class CheckoutController extends Controller
                 return back()->withInput()->with('error', 'Mã giảm giá chưa đến ngày bắt đầu sử dụng.');
             }
 
-            //Kiểm tra giới hạn sử dụng
-            if ($voucher->max_usage_count <= $voucher->orders()->count()) {
-                return back()->withInput()->with('error', 'Mã giảm giá đã hết lượt sử dụng.');
+            // Kiểm tra lượt dùng 
+            if (!$userVoucher && $voucher->max_usage_count > 0 && $voucher->orders()->count() >= $voucher->max_usage_count) {
+                return back()->withInput()->with('error', 'Mã giảm giá chung này đã hết lượt sử dụng.');
             }
 
             //Tính toán giảm giá
@@ -139,6 +154,12 @@ class CheckoutController extends Controller
             'status'         => $paymentStatus,
             'paid_at'        => ($paymentStatus === 'success') ? now() : null,
         ]);
+
+        if ($userVoucher) {
+            \Illuminate\Support\Facades\DB::table('user_vouchers')
+                ->where('id', $userVoucher->id)
+                ->update(['used_at' => now()]);
+        }
 
         $totalRewardPoints = 0;
 
