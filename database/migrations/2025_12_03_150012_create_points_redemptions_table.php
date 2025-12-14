@@ -28,6 +28,10 @@ return new class extends Migration
             $table->foreignId('voucher_id')
             ->constrained('vouchers')
             ->onDelete('restrict');
+
+            $table->foreignId('user_voucher_id')
+            ->constrained('user_vouchers') // Liên kết với bảng user_vouchers
+            ->onDelete('cascade');
         
 
            

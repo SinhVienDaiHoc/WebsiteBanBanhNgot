@@ -135,10 +135,16 @@
             </a>
 
             {{-- Khách hàng --}}
-            <a href="#"
-               class="admin-nav-link">
+            <a href="{{ route('admin.user.index') }}" 
+               class="admin-nav-link {{ request()->routeIs('admin.user.index') ? 'active' : '' }}">
                 Quản lí khách hàng
             </a>
+
+             <a href="{{ route('admin.voucher.index') }}"
+               class="admin-nav-link {{ request()->routeIs('admin.voucher.index') ? 'active' : '' }}">
+                Quản lí voucher
+            </a>
+            
         </nav>
 
         <div class="admin-sidebar-footer">

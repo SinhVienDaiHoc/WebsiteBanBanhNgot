@@ -87,6 +87,13 @@
                 {{ number_format($total, 0, ',', '.') }} đ
             </span>
         </div>
+        {{-- =================================== --}}
+        <div class="mb-3">
+    <label for="voucher_code" class="form-label">Mã Giảm Giá (Voucher)</label>
+    <div class="input-group">
+        <input type="text" class="form-control" id="voucher_code" name="voucher_code" placeholder="Nhập mã voucher...">
+        </div>
+</div>
 
         <button type="submit" class="btn btn-success px-4">
             Xác nhận đặt hàng

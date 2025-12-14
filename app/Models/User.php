@@ -54,16 +54,35 @@ class User extends Authenticatable
     //=============================================
    
     //RELATIONSHIP
+    //xem giỏ hàng
     public function cart():HasOne{
         return $this->hasOne(Cart::class);
     }
+
+    //kết nối để xem điểm tích lũy
     public function points():HasMany{
         return $this->hasMany(Point::class);
     }
 
+
+//kết nối để lấy các voucher mà user này đã dùng
+public function usedVouchers()
+{
+    return $this->hasMany(UserVoucher::class);
+}
+
+//xem đơn đặt hàng
+    public function orders()
+{
+    return $this->hasMany(Order::class);
+}
+
+//xem giao dịch đổi điểm
     public function redemptions():HasMany{
         return $this->hasMany(PointsRedemption::class);
     }
+
+    //xem profile
     public function profile(): HasOne
 {
     

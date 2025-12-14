@@ -9,6 +9,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\UserOrderController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\VoucherExchangeController;
 
 use App\Http\Controllers\Admin\AdminLoginController;
 use App\Http\Controllers\Admin\AdminController;
@@ -18,6 +19,12 @@ use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\PolicyController;
 use App\Http\Middleware\IsAdmin;
+use App\Http\Controllers\Admin\AdminVoucherController;
+use App\Http\Controllers\Admin\UserController;
+
+
+
+
 
 // USER ROUTES
 
@@ -77,7 +84,24 @@ Route::middleware('auth')->group(function () {
     Route::put('/password', [ProfileController::class, 'changePassword'])->name('user-password.update');
 });
 
+//BLADE VOUCHER
+Route::middleware(['auth'])->group(function () {
+    Route::get('/doi-voucher', [VoucherExchangeController::class, 'index'])->name('voucher.exchange.index');
+    Route::post('/doi-voucher/{voucher}', [VoucherExchangeController::class, 'exchange'])->name('voucher.exchange.exchange');
+});
 
+    //Checkout
+    Route::post('/apply-voucher', [CheckoutController::class, 'applyVoucher'])->name('checkout.applyVoucher');
+    Route::post('/remove-voucher', [CheckoutController::class, 'removeVoucher'])->name('checkout.removeVoucher');
+
+
+////=========================================
+Route::get('/my-vouchers/{userVoucher}', [\App\Http\Controllers\UserVoucherController::class, 'show'])
+    ->name('user.vouchers.show');
+    Route::get('/my-vouchers', [\App\Http\Controllers\UserVoucherController::class, 'index'])
+    ->name('user-voucher.index');
+    
+////=========================================
 
 // ADMIN AUTH ROUTES (KHÔNG LẶP)
 
@@ -92,6 +116,22 @@ Route::prefix('admin')
     ->name('admin.')
     ->middleware(['auth', IsAdmin::class])
     ->group(function () {
+
+
+//QUẢN LÍ USER
+   Route::prefix('user')->name('user.')->group(function () {
+            
+            //  Danh sách User (INDEX)
+            Route::get('/', [UserController::class, 'index'])
+                 ->name('index'); // Tên Route: admin.user.index
+
+            // Chi tiết User (SHOW)
+            Route::get('/{user}', [UserController::class, 'show']) 
+                 ->name('show'); // Tên Route: admin.user.show
+            
+    
+        });
+
 
         // TRANG ADMIN HOME (sau khi login)
         Route::get('/view', function () {
@@ -133,4 +173,31 @@ Route::prefix('admin')
 
             Route::delete('/delete/{id}', [AdminCategoryController::class, 'destroy'])->name('destroy');
         });
+
+
+        //VOUCHER
+        Route::prefix('voucher')->name('voucher.')->group(function () {
+    // Hiển thị danh sách Vouchers
+    Route::get('/', [AdminVoucherController::class, 'index'])->name('index');
+    
+    // Thêm các route CRUD (Tạo, Sửa, Xóa) khác nếu cần
+    Route::get('/create', [AdminVoucherController::class, 'create'])->name('create');
+    Route::post('/store', [AdminVoucherController::class, 'store'])->name('store');
+    
+    Route::get('/edit/{id}', [AdminVoucherController::class, 'edit'])->name('edit');
+    Route::put('/update/{id}', [AdminVoucherController::class, 'update'])->name('update');
+    
+    Route::delete('/delete/{id}', [AdminVoucherController::class, 'destroy'])->name('destroy');
+
+    Route::get('/{voucher}/stats', [AdminVoucherController::class, 'stats'])->name('stats');//thống kê
+          
+        });
+
+
+ 
+
     });
+
+
+
+

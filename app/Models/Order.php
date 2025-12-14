@@ -37,5 +37,9 @@ class Order extends Model
             default         => 'Không xác định',
         };
     }
+    public function user()
+{
+    return $this->belongsTo(User::class);
+}
 }
 

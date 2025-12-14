@@ -9,11 +9,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class PointsRedemption extends Model
 {
     use HasFactory;
-    protected $table='points_redemption';
+    protected $table='points_redemptions';
     protected $fillable = [
         'user_id',
+        'voucher_id',
         'points_used',
-        'status'
+        'status',
+        'user_voucher_id',
     ];
      //===========================================
     //RELATIONSHIP
@@ -24,5 +26,11 @@ class PointsRedemption extends Model
    public function voucher():BelongsTo{
     return $this->belongsTo(Voucher::class);
 }
+
+// Túi voucher của Customer
+public function userVoucher()
+    {
+        return $this->belongsTo(UserVoucher::class);
+    }
     //===========================================
 }

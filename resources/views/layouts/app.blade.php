@@ -208,8 +208,21 @@
     </div>
     <div class="offcanvas-body small">
       <ul class="list-unstyled">
+        {{-- Chính sách --}}
         <li><a class="dropdown-item py-2" href="{{ route('chinhsachchung') }}">Các chính sách của cửa hàng</a></li>
 
+        {{-- List đổi thưởng --}}
+        <li><a class="dropdown-item fw-bold text-success" href="{{ route('voucher.exchange.index') }}">
+                <i class="bi bi-gift"></i> Đổi thưởng Voucher
+             </a></li>
+
+        {{-- Túi chứa voucher --}}
+        <li class="nav-item">
+    <a href="{{ route('user-voucher.index') }}" class="nav-link">
+        <i class="fas fa-ticket-alt"></i>
+        <p>Túi Voucher Của Tôi</p>
+    </a>
+</li>
 
         @foreach($globalCategories as $cate)
         <li>

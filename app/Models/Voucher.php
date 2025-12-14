@@ -12,10 +12,13 @@ class Voucher extends Model
     protected $table='vouchers';
     protected $fillable = [
         'code',
+        'name',
+        'description',
         'type',
         'discount_amount',
-        'min_order_amount',
         'required_points',
+        'max_usage_count',
+        'quantity',
         'start_at',
         'expires_at',
         'is_active',      
@@ -24,9 +27,13 @@ class Voucher extends Model
     //Ép kiểu:
     protected function casts(){
         return[
-            'start_at'=>'datetime',
-            'expires_at'=>'datetime',
-            'is_active'=>'boolean',
+           'discount_amount' => 'integer',
+        'required_points' => 'integer',
+        'max_usage_count' => 'integer',
+        'quantity' => 'integer',
+        'start_at' => 'datetime',
+        'expires_at' => 'datetime',
+        'is_active' => 'boolean',
         ];
     }
 

@@ -6,17 +6,22 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Voucher;
 
 class CheckoutController extends Controller
 {
     public function show()
     {
+        //Tính tiền nếu customer ko áp mã giảm giá
         $cart = session('cart', []);
-
         $total = 0;
         foreach ($cart as $item) {
             $total += $item['price'] * $item['quantity'];
         }
+        //==================================================
+
+        //Tính ti
+
 
         return view('checkout.thanhtoan', compact('total'));
     }
@@ -39,7 +44,7 @@ foreach ($cart as $item) {
 
 // TẠO ĐƠN HÀNG
 $order = \App\Models\Order::create([
-    'user_id'          => \Auth::id(),
+    'user_id'          => Auth::id(),
     'total'            => $total,            // <--- DÒNG NÀY RẤT QUAN TRỌNG
     'status'           => 0,
     'customer_name'    => $request->input('customer_name'),

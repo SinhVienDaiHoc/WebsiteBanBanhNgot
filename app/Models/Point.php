@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Point extends Model
 {
     use HasFactory;
-    protected $table='point';
+    protected $table='points';
     protected $fillable = [
       'user_id',
         'order_id',

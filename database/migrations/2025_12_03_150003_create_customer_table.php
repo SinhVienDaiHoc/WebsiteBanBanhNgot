@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('password')->nullable();
             $table->string('address')->nullable();
             $table->timestamps();
-            $table->date('ngaysinh');
             $table->integer('total_point')->nullable();
             $table->integer('CART_id_Cart');
         });
