@@ -10,6 +10,7 @@ use App\Models\Voucher;
 use App\Models\Profile;
 use App\Models\Payment;
 use App\Models\Product;
+use Illuminate\Support\Facades\DB;
 
 class CheckoutController extends Controller
 {
@@ -139,7 +140,7 @@ class CheckoutController extends Controller
             'paid_at'        => ($paymentStatus === 'success') ? now() : null,
         ]);
 
-
+        $totalRewardPoints = 0;
 
         // LƯU CÁC SẢN PHẨM TRONG ĐƠN
         foreach ($cart as $productId => $item) {
@@ -149,21 +150,43 @@ class CheckoutController extends Controller
                 'quantity'       => $item['quantity'],
                 'price_at_order' => $item['price'],
             ]);
-        }
+            $product = Product::find($productId);
+            if ($product) {
 
-        $product = Product::find($productId);
-        if ($product) {
-            if ($product->stock >= $item['quantity']) {
-                $product->decrement('stock', $item['quantity']);
+                if ($product->stock >= $item['quantity']) {
+                    $product->decrement('stock', $item['quantity']);
+                }
+
+                $pointsOfThisProduct = $product->reward_point;
+
+                if ($pointsOfThisProduct == null) {
+                    $pointsOfThisProduct = 0;
+                }
+                $totalRewardPoints += ($pointsOfThisProduct * $item['quantity']);
             }
         }
 
 
+        if ($totalRewardPoints > 0) {
+            \App\Models\Point::create([
+                'user_id'     => Auth::id(),
+                'order_id'    => $order->id,
+                'points'      => $totalRewardPoints,
+                'type'        => 1,
+                'description' => "Tích điểm từ đơn hàng #{$order->id}",
+            ]);
+        }
 
-        // Xoá giỏ hàng
+
         session()->forget('cart');
 
-        // Chuyển sang chi tiết đơn hàng
+        // Thông báo thành công kèm số điểm nhận được
+        $message = 'Đặt hàng thành công!';
+        if ($totalRewardPoints > 0) {
+            $message .= " Bạn nhận được +{$totalRewardPoints} điểm tích lũy.";
+        }
+
+
         return redirect()
             ->route('orders.show', $order)
             ->with('success', 'Đặt hàng thành công!');
