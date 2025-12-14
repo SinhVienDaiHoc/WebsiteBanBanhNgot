@@ -17,6 +17,7 @@ return new class extends Migration
             $table->tinyInteger('status')->nullable();
             $table->decimal('total', 10, 0)->nullable();
             $table->string('shipping_address', 255)->nullable();
+            $table->string('payment_method', 50)->nullable();
             $table->timestamps();//created_at và update_at
             //==========================================================
             //CÁC KHÓA NGOẠI

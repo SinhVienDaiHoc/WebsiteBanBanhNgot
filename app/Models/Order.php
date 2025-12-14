@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Order extends Model
 {
@@ -12,10 +13,8 @@ class Order extends Model
         'user_id',
         'total',
         'status',
-        'customer_name',
-        'customer_phone',
-        'customer_address',
-        'payment_method',
+        'shipping_address',
+        'voucher_id'
     ];
 
     protected $casts = [
@@ -26,6 +25,12 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
+
+    public function voucher()
+{
+    return $this->belongsTo(Voucher::class);
+}
     public function getStatusTextAttribute()
     {
         return match ($this->status) {
@@ -41,5 +46,9 @@ class Order extends Model
 {
     return $this->belongsTo(User::class);
 }
+public function payment(): HasOne
+    {
+        return $this->hasOne(Payment::class); 
+    }
 }
 

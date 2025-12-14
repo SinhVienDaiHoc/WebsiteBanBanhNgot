@@ -66,8 +66,8 @@
         @forelse ($customers as $i => $c)
             <tr>
                 <td>{{ $i + 1 }}</td>
-                <td>{{ $c->customer_name }}</td>
-                <td>{{ $c->customer_phone }}</td>
+                <td>{{ $c->full_name }}</td>
+                <td>{{ $c->phone_number }}</td>
                 <td>{{ $c->total_orders }}</td>
                 <td>{{ $c->last_order_at }}</td>
             </tr>

@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->tinyInteger('method')->nullable();
+            $table->string('payment_method', 50);
             $table->dateTime('paid_at')->nullable();
-            $table->decimal('amount', 10, 0)->nullable();
+            $table->decimal('amount', 10, 0);
+            $table->string('status', 20)->default('pending');
             $table->timestamps();
               //===================================
             //CÁC RÀNG BUỘC

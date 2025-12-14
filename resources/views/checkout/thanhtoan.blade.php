@@ -19,6 +19,18 @@
         </div>
     @endif
 
+    @if (session('error'))
+            <div class="alert alert-danger" role="alert">
+                {{ session('error') }}
+            </div>
+        @endif
+
+        {{-- HIỂN THỊ THÀNH CÔNG (Ví dụ: áp dụng voucher thành công) --}}
+        @if (session('success'))
+            <div class="alert alert-success" role="alert">
+                {{ session('success') }}
+            </div>
+        @endif
     <form action="{{ route('checkout.process') }}" method="POST" class="mb-5">
         @csrf
 
@@ -29,7 +41,7 @@
                    name="customer_name"
                    class="form-control"
                    placeholder="Nhập họ và tên"
-                   value="{{ old('customer_name') }}">
+                   value="{{ old('customer_name',optional($profile)->full_name) }}">
         </div>
 
         {{-- Số điện thoại --}}
@@ -39,7 +51,7 @@
                    name="customer_phone"
                    class="form-control"
                    placeholder="Nhập số điện thoại"
-                   value="{{ old('customer_phone') }}">
+                   value="{{ old('customer_phone',optional($profile)->phone_number) }}">
         </div>
 
         {{-- Địa chỉ --}}
@@ -48,7 +60,7 @@
             <textarea name="customer_address"
                       rows="3"
                       class="form-control"
-                      placeholder="Nhập địa chỉ chi tiết">{{ old('customer_address') }}</textarea>
+                      placeholder="Nhập địa chỉ chi tiết">{{ old('customer_address',optional($profile)->address) }}</textarea>
         </div>
 
         {{-- Phương thức thanh toán --}}

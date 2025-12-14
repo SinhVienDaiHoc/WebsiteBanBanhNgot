@@ -37,19 +37,21 @@ class AdminDashboardController extends Controller
 
 
         // ===== 3) DANH SÁCH KHÁCH HÀNG CÓ ĐƠN HOÀN TẤT =====
-        $customers = DB::table('orders')
-         ->where('status', 3) // chỉ đơn hoàn tất
-        ->whereNotNull('customer_name')
-         ->whereNotNull('customer_phone')
-         ->select(
-        'customer_name',
-        'customer_phone',
-        DB::raw('COUNT(*) as total_orders'),
-        DB::raw('MAX(updated_at) as last_order_at')
-         )
-        ->groupBy('customer_name', 'customer_phone')
-        ->orderByDesc('last_order_at')
-        ->get();
+     $customers = DB::table('orders')
+            ->join('users', 'orders.user_id', '=', 'users.id') // JOIN vào bảng users
+            ->join('profiles', 'users.id', '=', 'profiles.user_id') // JOIN vào bảng profiles
+            ->where('orders.status', $completedStatus) // chỉ đơn hoàn tất
+            ->whereNotNull('orders.user_id') // Đảm bảo đơn hàng có user_id
+            ->select(
+                'profiles.full_name', // Lấy tên từ bảng profiles
+                'profiles.phone_number', // Lấy SĐT từ bảng profiles
+                DB::raw('COUNT(orders.id) as total_orders'), // Đếm số đơn hàng
+                DB::raw('MAX(orders.updated_at) as last_order_at') // Lấy thời gian đơn cuối cùng
+            )
+            // GROUP BY theo user_id (để nhóm đơn hàng), và các cột hiển thị (full_name, phone_number)
+            ->groupBy('orders.user_id', 'profiles.full_name', 'profiles.phone_number') 
+            ->orderByDesc('last_order_at')
+            ->get();
 
 
         // ===== 4) TỔNG DOANH THU TẤT CẢ (CHỈ HOÀN TẤT) =====
