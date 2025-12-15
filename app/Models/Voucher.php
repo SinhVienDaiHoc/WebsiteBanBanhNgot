@@ -45,6 +45,16 @@ class Voucher extends Model
     {
         return $this->hasMany(Order::class);
     }
+    public function redemptions(): HasMany
+    {
+        // PointsRedemption.voucher_id là FK trỏ tới Voucher.id
+        return $this->hasMany(PointsRedemption::class, 'voucher_id');
+    }
+    public function userVouchers(): HasMany
+    {
+        // UserVoucher.voucher_id là FK trỏ tới Voucher.id
+        return $this->hasMany(UserVoucher::class, 'voucher_id');
+    }
      //====================================
 
 

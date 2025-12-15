@@ -32,9 +32,5 @@ class UserVoucher extends Model
         return $this->hasOne(PointsRedemption::class, 'user_voucher_id'); 
     }
 
-    //kết nối đến UserVoucher
-    public function userVoucher(): BelongsTo
-    {
-        return $this->belongsTo(UserVoucher::class, 'user_voucher_id');
-    }
+    
 }
