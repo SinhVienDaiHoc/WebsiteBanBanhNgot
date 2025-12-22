@@ -10,6 +10,14 @@ use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
+
+public function index(){
+    // Lấy tất cả sản phẩm, có thể kèm theo tên danh mục để hiển thị
+    $products = Product::with('category')->latest()->get(); 
+    
+    return view('home', compact('products'));
+}
+
     // Hàm hiển thị sản phẩm theo danh mục
     public function showByCategory($id)
     {

@@ -28,19 +28,22 @@ class UserOrderController extends Controller
         return view('orders.chitietdonhang', compact('order'));
     }
 
+    
 
 
     public function destroy(Order $order)
     {
-        if ($order->user_id !== Auth::id()) {
-            abort(403);
-        }
+   if ($order->status < 2) {
+        
+        $order->update([
+            'status' => 4,
+            'updated_at' => now()
+        ]);
 
-        $order->delete();
-
-        return redirect()->route('orders.index')
-            ->with('success', 'Đã xoá đơn hàng khỏi lịch sử.');
+        return redirect()->route('orders.index')->with('success', 'Đã hủy đơn hàng thành công.');
+        
+    } else {
+        return redirect()->route('orders.index')->with('error', 'Đơn hàng đang giao hoặc đã hoàn thành, không thể hủy!');
     }
-
     
-}
+}}

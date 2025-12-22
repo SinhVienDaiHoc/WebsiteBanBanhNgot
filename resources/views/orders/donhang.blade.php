@@ -39,7 +39,7 @@
                                      onsubmit="return confirm('Bạn có chắc muốn xoá đơn hàng này khỏi lịch sử?');">
                                     @csrf
                                  @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-outline-danger ms-1">Xoá</button>
+                                <button type="submit" class="btn btn-sm btn-outline-danger ms-1">Hủy đơn</button>
                                 </form>
                        </td>
                     </tr>

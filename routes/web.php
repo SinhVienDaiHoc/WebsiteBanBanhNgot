@@ -26,92 +26,11 @@ use App\Http\Controllers\ReviewController;
 
 
 
-// USER ROUTES
-
-// TRANG CHỦ
-Route::get('/', [HomeController::class, 'index'])->name('home');
-
-// CHÍNH SÁCH
-Route::get('/chinhsach', [HomeController::class, 'chinhsach'])->name('chinhsach');
-
-//CÁC CHÍNH SÁCH CỦA CỬA HÀNG
-Route::get('/chinhsach', [PolicyController::class, 'index'])->name('chinhsach.mainchinhsach');
-Route::get('/chinhsachchung', [PolicyController::class, 'chinhsachchung'])->name('chinhsachchung');
-Route::get('/chinhsachvanchuyen', [PolicyController::class, 'chinhsachvanchuyen'])->name('chinhsachvanchuyen');
-Route::get('/chinhsachdoitra', [PolicyController::class, 'chinhsachdoitra'])->name('chinhsachdoitra');
-Route::get('/chinhsachbaomat', [PolicyController::class, 'chinhsachbaomat'])->name('chinhsachbaomat');
-Route::get('/chinhsachthanhtoan', [PolicyController::class, 'chinhsachthanhtoan'])->name('chinhsachthanhtoan');
-
-
-// SẢN PHẨM 
-Route::get('/danh-muc/{id}', [ProductController::class, 'showByCategory'])->name('category.show');
-
-
-// Route xem chi tiết sản phẩm (nhận vào ID)
-Route::get('/san-pham/{id}', [ProductController::class, 'detail'])->name('product.detail');
-
-// TÌM KIẾM
-Route::get('/search', [ProductController::class, 'search'])->name('search');
-
-// AUTH USER
-Route::get('/register', [AuthController::class, 'register'])->name('register');
-Route::post('/register', [AuthController::class, 'postRegister'])->name('postRegister');
-
-Route::get('/dang-nhap', [AuthController::class, 'login'])->name('login');
-Route::post('/dang-nhap', [AuthController::class, 'postLogin'])->name('postLogin');
-
-Route::post('/dang-xuat', [AuthController::class, 'logout'])->name('logout');
-
-// GIỎ HÀNG
-Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
-Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
-Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
-
-// THANH TOÁN
-Route::get('/thanhtoan', [CheckoutController::class, 'show'])->name('checkout.show');
-Route::post('/thanhtoan', [CheckoutController::class, 'process'])->name('checkout.process');
-
-// ĐƠN HÀNG USER (cần login)
-Route::middleware('auth')->group(function () {
-    Route::get('/don-hang', [UserOrderController::class, 'index'])->name('orders.index');
-    Route::get('/don-hang/{order}', [UserOrderController::class, 'show'])->name('orders.show');
-    Route::delete('/don-hang/{order}', [UserOrderController::class, 'destroy'])->name('orders.destroy');
-
-    //PROFILE
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::put('/password', [ProfileController::class, 'changePassword'])->name('user-password.update');
-});
-
-//BLADE VOUCHER
-Route::middleware(['auth'])->group(function () {
-    Route::get('/doi-voucher', [VoucherExchangeController::class, 'index'])->name('voucher.exchange.index');
-    Route::post('/doi-voucher/{voucher}', [VoucherExchangeController::class, 'exchange'])->name('voucher.exchange.exchange');
-});
-
-//Checkout
-Route::post('/apply-voucher', [CheckoutController::class, 'applyVoucher'])->name('checkout.applyVoucher');
-Route::post('/remove-voucher', [CheckoutController::class, 'removeVoucher'])->name('checkout.removeVoucher');
-
-
-////=========================================
-Route::get('/my-vouchers/{userVoucher}', [\App\Http\Controllers\UserVoucherController::class, 'show'])
-    ->name('user.vouchers.show');
-Route::get('/my-vouchers', [\App\Http\Controllers\UserVoucherController::class, 'index'])
-    ->name('user-voucher.index');
-
-////=========================================
-
-// ADMIN AUTH ROUTES (KHÔNG LẶP)
-
-Route::get('admin/login', [AdminLoginController::class, 'showLoginForm'])->name('admin.login');
-Route::post('admin/login', [AdminLoginController::class, 'login'])->name('admin.login.post');
-Route::post('admin/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
 
 
 
-// ADMIN ROUTES
+
+//====================== START ADMIN ROUTE============================================
 Route::prefix('admin')
     ->name('admin.')
     ->middleware(['auth', IsAdmin::class])
@@ -163,7 +82,7 @@ Route::prefix('admin')
         });
 
         // CATEGORIES
-        Route::prefix('categories')->name('category.')->group(function () {
+Route::prefix('categories')->name('category.')->group(function () {
             Route::get('/', [AdminCategoryController::class, 'index'])->name('index');
             Route::get('/create', [AdminCategoryController::class, 'create'])->name('create');
             Route::post('/store', [AdminCategoryController::class, 'store'])->name('store');
@@ -193,5 +112,104 @@ Route::prefix('admin')
 
         });
     });
+
+//====================== END ADMIN ROUTE============================================
+
+
+// ======================================================================================================================
+
+
+
+//====================== START CLIENT ROUTE============================================
+
+// TRANG CHỦ
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/blogs', [HomeController::class, 'blogs'])->name('blogs');
+
+//CÁC CHÍNH SÁCH CỦA CỬA HÀNG
+Route::get('/chinhsach', [HomeController::class, 'chinhsach'])->name('chinhsach');
+Route::get('/chinhsach', [PolicyController::class, 'index'])->name('chinhsach.mainchinhsach');
+Route::get('/chinhsachchung', [PolicyController::class, 'chinhsachchung'])->name('chinhsachchung');
+Route::get('/chinhsachvanchuyen', [PolicyController::class, 'chinhsachvanchuyen'])->name('chinhsachvanchuyen');
+Route::get('/chinhsachdoitra', [PolicyController::class, 'chinhsachdoitra'])->name('chinhsachdoitra');
+Route::get('/chinhsachbaomat', [PolicyController::class, 'chinhsachbaomat'])->name('chinhsachbaomat');
+Route::get('/chinhsachthanhtoan', [PolicyController::class, 'chinhsachthanhtoan'])->name('chinhsachthanhtoan');
+
+
+// GIỎ HÀNG
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add/{id}', [CartController::class, 'add'])->name('cart.add');
+Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
+
+// CATEGORY ( DANH MỤC)
+Route::get('/danh-muc/{id}', [ProductController::class, 'showByCategory'])->name('category.show');
+
+// Route xem chi tiết sản phẩm (nhận vào ID)
+Route::get('/san-pham/{id}', [ProductController::class, 'detail'])->name('product.detail');
+
+// CHECKOUT ( THANH TOÁN)
+Route::get('/thanhtoan', [CheckoutController::class, 'show'])->name('checkout.show');
+Route::post('/thanhtoan', [CheckoutController::class, 'process'])->name('checkout.process');
+
+
+ //PROFILE
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/password', [ProfileController::class, 'changePassword'])->name('user-password.update');
+
+
+    // ĐƠN HÀNG USER (cần login)
+Route::middleware('auth')->group(function () {
+    Route::get('/don-hang', [UserOrderController::class, 'index'])->name('orders.index');
+    Route::get('/don-hang/{order}', [UserOrderController::class, 'show'])->name('orders.show');
+    Route::delete('/don-hang/{order}', [UserOrderController::class, 'destroy'])->name('orders.destroy');
+});
+
+
+//BLADE VOUCHER
+Route::middleware(['auth'])->group(function () {
+    Route::get('/doi-voucher', [VoucherExchangeController::class, 'index'])->name('voucher.exchange.index');
+    Route::post('/doi-voucher/{voucher}', [VoucherExchangeController::class, 'exchange'])->name('voucher.exchange.exchange');
+});
+
+
+//Checkout có lien quan tơi voucher
+Route::post('/apply-voucher', [CheckoutController::class, 'applyVoucher'])->name('checkout.applyVoucher');
+Route::post('/remove-voucher', [CheckoutController::class, 'removeVoucher'])->name('checkout.removeVoucher');
+Route::get('/my-vouchers/{userVoucher}', [\App\Http\Controllers\UserVoucherController::class, 'show'])
+    ->name('user.vouchers.show');
+Route::get('/my-vouchers', [\App\Http\Controllers\UserVoucherController::class, 'index'])
+    ->name('user-voucher.index');
+
 // Route lưu đánh giá
 Route::post('/review/store', [ReviewController::class, 'store'])->name('review.store');
+    
+//====================== END CLIENT ROUTE============================================
+
+
+// ======================================================================================================================
+
+
+// ============================= START AUTH ROUTE====================================
+//SEARCH
+Route::get('/search', [ProductController::class, 'search'])->name('search');
+
+// AUTH USER
+Route::get('/register', [AuthController::class, 'register'])->name('register');
+Route::post('/register', [AuthController::class, 'postRegister'])->name('postRegister');
+
+Route::get('/dang-nhap', [AuthController::class, 'login'])->name('login');
+Route::post('/dang-nhap', [AuthController::class, 'postLogin'])->name('postLogin');
+
+Route::post('/dang-xuat', [AuthController::class, 'logout'])->name('logout');
+// ============================= END AUTH ROUTE====================================
+
+
+
+
+// ADMIN AUTH ROUTES (KHÔNG LẶP)
+
+Route::get('admin/login', [AdminLoginController::class, 'showLoginForm'])->name('admin.login');
+Route::post('admin/login', [AdminLoginController::class, 'login'])->name('admin.login.post');
+Route::post('admin/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');

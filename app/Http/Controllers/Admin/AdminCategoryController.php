@@ -35,7 +35,7 @@ class AdminCategoryController extends Controller
         ]);
 
         
-        $data['slug'] = Str::slug($request->name);
+        $data['slug'] = Str::slug($request->name,'-', 'vi');
 
         Category::create($data);
 

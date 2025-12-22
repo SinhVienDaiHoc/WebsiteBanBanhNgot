@@ -1,65 +1,196 @@
-@extends('chinhsach.layoutschinhsach')
-@section ('title','Chinh sach tra hang')
-@section('main_chinhsach')
- <section class="py-3 container ">
+@extends('layouts.app')
+@section('title', 'Chính sách đổi trả - Sweet Corner')
 
-                {{-- start Chính sách đổi trả --}}
-                <h2 class="py-3">Chính sách đổi trả</h2>
+@section('content')
+<style>
+    .policy-page {
+        background-color: #FAF6ED;
+        padding: 60px 0;
+    }
+    .policy-card {
+        background: #ffffff;
+        padding: 45px;
+        border-radius: 30px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+    }
+    .policy-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    .policy-header h2 {
+        font-family: 'Playfair Display', serif;
+        font-weight: 800;
+        color: #332D2D;
+        font-size: 2.2rem;
+    }
+    
+    .section-title {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        color: #4a1f1b;
+        border-bottom: 2px solid #C5A059;
+        display: inline-block;
+        margin-bottom: 20px;
+        padding-bottom: 5px;
+    }
 
-                <hr>
-                {{-- start content 1 --}}
-                <h5>1. Điều kiện đổi trả</h5>
-                <p>* ĐỐI VỚI ĐƠN HÀNG MUA TRỰC TIẾP TẠI CỬA HÀNG:</p>
-                <p>- Được đổi trả khi khách hàng chưa ra khỏi cửa hàng và khi chưa xuất hóa đơn VAT</p>
-                <p>* ĐỐI VỚI ĐƠN HÀNG ONLINE:</p>
-                <p>Quý khách cần kiểm tra tình trạng hàng hóa và có thể đổi hàng/trả lại hàng ngay tại thời điểm giao/nhận hàng trong những trường hợp sau:</p>
-                <ul>
-                  <li>Hàng không đúng chủng loại, mẫu mã trong đơn hàng đã đặt</li>
-                  <li>Sản phẩm bị lỗi hoặc bị hư hại trong quá trình vận chuyển</li>
-                  <li>Không đủ số lượng như trong đơn hàng</li>
-                </ul>
-                <p>Sau khi giao nhận hàng thành công, chính sách đổi trả sẽ không được áp dụng.</p>
-                <hr>
-                <ul>
-                  <li>Nếu anh/chị có đồng kiểm với shipper và phát hiện bánh bị xô lệch, anh/chị vui lòng không nhận bánh và chụp lại hình bánh lỗi. Shipper sẽ chuyển bánh quay về và cửa hàng sẽ đổi bánh mới hoặc hoàn lại tiền cho anh/chị.</li>
-                  <li>Nếu anh/chị không đồng kiểm cùng shipper và phát hiện ra bánh bị xô lệch sau đó, cửa hàng rất khó làm việc với đối tác giao hàng (do shipper đã kiểm tra bánh từ chiều đi) và xin phép từ chối xử lý các vấn đề xô lệch ạ.</li>
-                  <li>Nếu shipper không cho kiểm tra hàng, khách hàng có thể từ chối nhận hàng và liên hệ ngay với cửa hàng hoặc số hotline: <strong>0866 89 3570</strong> để được hỗ trợ.</li>
-                </ul>
+    .note-box {
+        background-color: #fff9f0;
+        border-left: 4px solid #C5A059;
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 0 15px 15px 0;
+    }
+    .warning-box {
+        background-color: #fff5f5;
+        border-left: 4px solid #dc3545;
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 0 15px 15px 0;
+    }
 
-                <p>* Đối với trường hợp khách hàng không kiểm tra hàng trước khi nhận, chính sách đổi trả sẽ không được áp dụng. </p>
-                <p>* Qúy khách hàng cần lưu ý bảo quản sản phẩm theo hướng dẫn của cửa hàng (Các dòng bánh mì và cookies có thể bảo quản ở nhiệt độ thường (khoảng 20 độ C), những sản phẩm bánh khác cần được bảo quản trong ngăn mát tủ lạnh (khoảng 3 - 7 độ C) và kem bảo quản tủ đá). Khi sử dụng sản phẩm có bất kỳ phản hồi nào về chất lượng sản phẩm quý khách hàng lập tức (hoặc trong vòng 12h) liên hệ cửa hàng hoặc hotline để được giải quyết.</p>
-                <p>*Lưu ý: Những sản phẩm không được quản quản đúng cách sẽ không được áp dụng chính sách đổi trả. </p>
+    .method-label {
+        background: #3E4A3D;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 50px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+        display: inline-block;
+    }
 
-                <p><strong>Anh/chị vui lòng thực hiện đầy đủ để được hỗ trợ tốt nhất. Mọi thắc mắc/khiếu nại quý khách liên hệ hotline: 0866 89 3570  (từ 7:00 đến 22:00).</strong></p>
-                {{-- end content 1 --}}
-               <hr>
-                 {{-- start content 2 --}}
-                <h5>2. Chính sách đổi trả và hoàn tiền</h5>
-                <p>Sau khi đặt bánh, khách hàng vì lý do nào đó mà không nhận bánh theo thời gian đã đặt hoặc phải hủy đơn bánh, cửa hàng sẽ thực hiện theo các trường hợp cụ thể:</p> 
-               <ul>
-                <li>Nếu khách hàng đã chuyển khoản mà cửa hàng chưa làm bánh, cửa hàng sẽ hoàn lại 100% số tiền khách đã chuyển khoản. </li>
-                <li>Nếu khách hàng đã chuyển khoản, cửa hàng đã làm bánh theo yêu cầu, cửa hàng không thể bán lại cho khách hàng khác được, nguyên liệu đã hoàn thiện nên cửa hàng sẽ không hoàn lại số tiền đã đặt bánh, áp dụng tất cả các loại bánh.</li>
-               </ul>
-               <p> <strong>Khách hàng cần chú ý: </strong></p>
-               <ul><li>Cần chuyển khoản hoặc đặt trước 50% hoặc 100% tổng số tiền bánh tùy theo đơn hàng, cửa hàng mới nhận làm bánh. </li>
-               <li>Khách hàng hủy bánh vì bất cứ lý do gì, cửa hàng sẽ không hoàn lại số tiền này.</li></ul>
-               <p> <strong class="fs-6">#Tại sao không hoàn lại tiền?</strong> Vì tất cả những dòng bánh này, cửa hàng đã mất tiền nguyên liệu, tiền công làm ra chiếc bánh đó, bánh đã làm ra không thể bán lại cho khách hàng khác nên cửa hàng không thể hoàn lại số tiền này được</p>
-                {{-- end content 2 --}}
-                <br>
-                {{-- start content 3 --}}
-                <h5>3. Quy trình</h5>
-                <li> <strong>Sweet Corner</strong> luôn đảm bảo chất lượng cao nhất có thể,quy trình vệ sinh an toàn thực phẩm nghiêm ngặt</li>
-                <li> Sau khi sản xuất tại xưởng, bánh sẽ được bảo quản và vận chuyển đến hệ thống cửa hàng <strong>Sweet Corner</strong> trên địa bàn Tp Hồ Chí Minh.</li>
-                {{-- end content 3 --}}
-                <br>
-                {{-- start content 4 --}}
-                <h5>4. Thông tin liên hệ</h5>
-                <p>Nếu cần hỗ trợ thêm, vui lòng liên hệ với cửa hàng thông qua:</p>
-                <li>Fanpage:"CHÈN LINK FAN PAGE "</li>
-                <li></li>
-                {{-- end content 4 --}}
-                  {{-- end Chính sách đổi trả --}}
-     
+    .policy-list {
+        list-style: none;
+        padding-left: 0;
+    }
+    .policy-list li {
+        position: relative;
+        padding-left: 25px;
+        margin-bottom: 10px;
+        color: #555;
+        line-height: 1.7;
+        font-size: 0.95rem;
+    }
+    .policy-list li::before {
+        content: "→";
+        color: #C5A059;
+        position: absolute;
+        left: 0;
+        font-weight: bold;
+    }
 
-    </section>
+    .temp-guide {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 15px;
+    }
+    .temp-item {
+        background: #f8f9fa;
+        padding: 8px 12px;
+        border-radius: 10px;
+        font-size: 0.8rem;
+        border: 1px solid #eee;
+    }
+
+    /* Sidebar Style */
+    .sidebar-policy {
+        position: sticky;
+        top: 20px;
+    }
+    .sidebar-title {
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        color: #332D2D;
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="policy-page">
+    <div class="container">
+        <div class="row">
+            
+            <div class="col-lg-8 mb-4">
+                <div class="policy-card">
+                    <div class="policy-header">
+                        <h2>Chính sách đổi trả & Hoàn tiền</h2>
+                        <p class="text-muted small">Đảm bảo quyền lợi tốt nhất cho trải nghiệm của bạn</p>
+                    </div>
+
+                    <div class="mb-5">
+                        <h5 class="section-title">1. Điều kiện đổi trả</h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <span class="method-label">Tại cửa hàng</span>
+                                <ul class="policy-list">
+                                    <li>Đổi trực tiếp khi chưa rời khỏi quầy.</li>
+                                    <li>Sản phẩm còn nguyên trạng, chưa sử dụng.</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <span class="method-label">Đặt hàng Online</span>
+                                <ul class="policy-list">
+                                    <li>Sai mẫu mã, chủng loại đơn hàng.</li>
+                                    <li>Hư hại do quá trình vận chuyển.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="note-box shadow-sm small">
+                            <h6 class="fw-bold"><i class="bi bi-info-circle-fill me-2"></i>Quy định đồng kiểm</h6>
+                            <p class="mb-0">Quý khách vui lòng <strong>đồng kiểm cùng Shipper</strong>. Nếu có sự cố xô lệch, hãy chụp ảnh và từ chối nhận. Chúng tôi sẽ xử lý ngay đơn mới.</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <h5 class="section-title">2. Chính sách hủy đơn & Hoàn tiền</h5>
+                        <div class="p-3 border rounded-4 mb-3 bg-white">
+                            <p class="mb-1 fw-bold text-success small">Hoàn 100%:</p>
+                            <p class="small text-muted mb-0">Khi khách hàng hủy đơn trước khi xưởng tiến hành làm bánh.</p>
+                        </div>
+                        <div class="p-3 border rounded-4 bg-white">
+                            <p class="mb-1 fw-bold text-danger small">Không hoàn tiền:</p>
+                            <p class="small text-muted mb-0">Khi bánh đã hoàn thiện (vì sản phẩm tươi không thể tái sử dụng).</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <h5 class="section-title">3. Hướng dẫn bảo quản</h5>
+                        <div class="temp-guide">
+                            <div class="temp-item"><i class="bi bi-thermometer-half text-warning"></i> 20°C: Bánh mì</div>
+                            <div class="temp-item"><i class="bi bi-snow text-primary"></i> 3-7°C: Bánh kem</div>
+                            <div class="temp-item"><i class="bi bi-ice-front text-info"></i> Tủ đá: Các loại Kem</div>
+                        </div>
+                        <p class="warning-box mt-3 small mb-0">
+                            Phản hồi chất lượng cần gửi trong vòng <strong>12 giờ</strong> kể từ khi nhận bánh.
+                        </p>
+                    </div>
+
+                    <div class="text-center p-4 rounded-4" style="background:#332D2D; color: #FAF6ED;">
+                        <p class="small mb-1">Hotline khiếu nại (7:00 - 22:00)</p>
+                        <h4 class="fw-bold" style="color: #C5A059;">0866 89 3570</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="sidebar-policy">
+                    <h4 class="sidebar-title">Đọc thêm</h4>
+                    <hr class="w-25 mb-4" style="border-top: 3px solid #C5A059;">
+                    
+                    {{-- Gọi danh sách link chính sách --}}
+                    @include('chinhsach.policy_link')
+
+                    <div class="mt-5 text-center">
+                        <a href="{{ url('/') }}" class="text-muted text-decoration-none small">
+                            <i class="bi bi-house-door me-1"></i> Quay lại Trang chủ
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div> </div>
+</div>
 @endsection

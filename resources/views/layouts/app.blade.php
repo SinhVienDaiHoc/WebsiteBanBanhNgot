@@ -1,288 +1,237 @@
 <!doctype html>
 <html lang="{{ str_replace('_','-', app()->getLocale() ) }}">
-
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>@yield('title') | {{ config('app.name') }}</title>
 
-  <meta charset="utf-8">
-  <title>STU Bakery</title>
+    {{-- Fonts & Icons --}}
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --cream: #FAF9F6;
+            --gold: #C5A059;
+            --dark-olive: #3E4A3D;
+            --soft-white: #ffffff;
+        }
 
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>@yield('title') | {{ config('app.name') }}</title>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--cream);
+            color: var(--dark-olive);
+        }
 
-  {{-- Bootstrap + Icons (CDN) --}}
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-  <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+        /* Navbar Ngang - Aesthetic Style */
+        .topbar {
+            background: var(--soft-white);
+            border-bottom: 1px solid rgba(197, 160, 89, 0.15);
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
 
-  <style>
-    .container-wide {
-      max-width: 1200px
-    }
+        .brand {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            color: var(--dark-olive);
+            font-size: 1.6rem;
+            letter-spacing: -0.5px;
+        }
 
-    .topbar {
-      background: #F8EEDB;
-      box-shadow: 0 6px 14px rgba(0, 0, 0, .04)
-    }
+        .brand span { color: var(--gold); }
 
-    .brand {
-      font-weight: 800;
-      color: #ffb000
-    }
+        /* Ô tìm kiếm tinh tế */
+        .search-container { max-width: 400px; position: relative; }
+        .search-input {
+            border-radius: 12px;
+            border: 1px solid #eee;
+            background: #f8f9fa;
+            padding-left: 40px;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        .search-input:focus {
+            box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.1);
+            border-color: var(--gold);
+            background: #fff;
+        }
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
 
-    .search-input {
-      border-radius: 999px;
-      background: #f6f7fb
-    }
+        /* Menu ngang */
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+        }
+        .nav-link-item {
+            text-decoration: none;
+            color: var(--dark-olive);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+        .nav-link-item:hover { color: var(--gold); }
 
-    .category-btn {
-      border-radius: 12px;
-      background: #f4f6f8
-    }
+        /* Icons Group */
+        .icon-link {
+            color: var(--dark-olive);
+            text-decoration: none;
+            position: relative;
+            transition: 0.3s;
+        }
+        .icon-link:hover { color: var(--gold); }
+        
+        .badge-cart {
+            background: var(--gold);
+            font-size: 0.65rem;
+            padding: 0.35em 0.6em;
+        }
 
-    /* fix selector: phải có khoảng trắng giữa .hero và .carousel-item */
-    .hero .carousel-item img {
-      width: 100%;
-      height: 420px;
-      object-fit: cover;
-      border-radius: 16px
-    }
+        /* Hero Carousel Adjustment */
+        .hero .carousel-item img {
+            height: 500px;
+            object-fit: cover;
+            border-radius: 25px;
+        }
 
-    .badge-dot {
-      position: absolute;
-      top: 0;
-      right: 0;
-      transform: translate(30%, -30%)
-    }
-
-    @media (max-width:576px) {
-      .hero .carousel-item img {
-        height: 240px
-      }
-    }
-  </style>
-
-  @stack('head')
+        @media (max-width: 992px) {
+            .nav-menu { display: none; } /* Mobile sẽ dùng offcanvas */
+        }
+    </style>
+    @stack('head')
 </head>
 
-<body class="site-background">
+<body>
 
+    <header class="topbar {{ request()->routeIs('home') ? 'sticky-top' : '' }}">
+        <div class="container d-flex align-items-center justify-content-between">
+            
+          {{-- Tool --}}
+            <div class="d-flex align-items-center gap-4">
+                <a href="{{ route('home') }}" class="text-decoration-none">
+                    <h1 class="brand mb-0">STU <span>Bakery</span></h1>
+                </a>
+                    
+                <a class="nav-link-item py-2" href="{{ route('chinhsachchung') }}">Chính sách cửa hàng</a>
 
-  <header class="topbar custom-header {{ request()->routeIs('home') ? 'sticky-top' : '' }}">
+                
+                <button class="btn border-0 fw-bold d-none d-lg-block" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCategories" style="font-size: 0.9rem;">
+                    <i class="bi bi-grid-fill me-1 text-gold"></i> VOUCHER</button>
+                <a class="nav-link-item py-2" href="{{ route('blogs') }}">BLOGS</a>
 
-    <div class="container container-wide py-2">
-      <div class="d-flex align-items-center gap-3">
+            </div>
+             {{-- Tool --}}
 
-        {{-- start Logo --}}
-        <a href="{{ route('home') }}" class="text-decoration-none d-flex align-items-center gap-2">
-          <span class="brand fs-4">STU Bakery</span>
-        </a>
-        {{-- end Logo --}}
-
-        {{-- start Tìm kiếm desktop --}}
-        <form action="{{ route('search') }}" method="GET" class="flex-grow-1 d-none d-md-block">
-          <div class="input-group">
-            <input class="form-control search-input px-4"
-              type="search"
-              name="q"
-              placeholder="Tìm kiếm tên bánh...">
-            <button class="btn search-btn px-3 rounded-end-pill" type="submit">
-              <i class="bi bi-search"></i>
-            </button>
-          </div>
-        </form>
-        {{-- end Tìm kiếm desktop --}}
-
-        {{-- start Icon phải --}}
-        <div class="ms-auto d-flex align-items-center gap-3">
-
-          {{-- GIỎ HÀNG --}}
-          <a href="{{ route('cart.index') }}" class="position-relative text-dark text-decoration-none">
-            <i class="bi bi-cart3 fs-4"></i>
-            @php
-            $cartCount = session('cart') ? array_sum(array_column(session('cart'), 'quantity')) : 0;
-            @endphp
-
-            <span class="badge bg-danger rounded-pill badge-dot">
-              {{ $cartCount }}
-            </span>
-
-            <span class="ms-1 d-none d-lg-inline">Giỏ hàng</span>
-          </a>
-
-          <div class="dropdown">
-            <a href="#" class="text-dark text-decoration-none dropdown-toggle d-flex align-items-center gap-2" data-bs-toggle="dropdown">
-              <i class="bi bi-person-circle fs-4"></i>
-              <span class="d-none d-lg-inline">
-                @auth
-                {{ Auth::user()->name }}
-                @else
-                Tài khoản
-                @endauth
-              </span>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end">
-
-              @guest
-              {{-- Khi CHƯA đăng nhập --}}
-              <li>
-                <a class="dropdown-item" href="{{ route('login') }}">Đăng nhập</a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="{{ route('register') }}">Đăng ký</a>
-              </li>
-              @endguest
-
-              @auth
-              {{-- Khi ĐÃ đăng nhập --}}
-              <li class="dropdown-item text-dark fw-bold d-flex align-items-center gap-2">
-                👤 {{ Auth::user()->name }}
-                <span class="badge bg-warning text-dark">
-        @php
-            $points = \Illuminate\Support\Facades\DB::table('points')
-                ->where('user_id', Auth::id())
-                ->sum('points');
-        @endphp
-        {{ $points }} điểm
-    </span>
-</li>
-
-              <li><a class="dropdown-item" href="{{ url('/profile') }}">Hồ sơ</a></li>
-              <li><a class="dropdown-item" href="{{ url('/don-hang') }}">Đơn hàng</a></li>
-
-              <li>
-                <form action="{{ route('logout') }}" method="POST">
-                  @csrf
-                  <button class="dropdown-item text-danger" type="submit">
-                    Đăng xuất
-                  </button>
+            {{-- SEARCH --}}
+            <div class="search-container flex-grow-1 mx-5 d-none d-lg-block">
+                <form action="{{ route('search') }}" method="GET">
+                    <i class="bi bi-search search-icon"></i>
+                    <input class="form-control search-input" type="search" name="q" placeholder="Tìm kiếm hương vị bạn yêu thích...">
                 </form>
-              </li>
-              @endauth
+            </div>
+           
 
-            </ul>
-          </div>
-          {{-- end Icon phải --}}
+            <div class="d-flex align-items-center gap-4">
+                <button class="btn d-lg-none" data-bs-toggle="collapse" data-bs-target="#mSearch">
+                    <i class="bi bi-search fs-5"></i>
+                </button>
+                 {{-- SEARCH --}}
 
-          {{-- start Nút search mobile --}}
-          <button class="btn d-md-none" data-bs-toggle="collapse" data-bs-target="#mSearch">
-            <i class="bi bi-search fs-5"></i>
-          </button>
+                <a href="{{ route('cart.index') }}" class="icon-link">
+                    <i class="bi bi-bag-heart fs-4"></i>
+                    @php $cartCount = session('cart') ? array_sum(array_column(session('cart'), 'quantity')) : 0; @endphp
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-cart">
+                        {{ $cartCount }}
+                    </span>
+                </a>
+
+                {{-- AUTH --}}
+                <div class="dropdown">
+                    <a href="#" class="icon-link d-flex align-items-center gap-2" data-bs-toggle="dropdown">
+                        <i class="bi bi-person fs-4"></i>
+                        @auth <span class="small fw-bold d-none d-md-inline">{{ Auth::user()->name }}</span> @endauth
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 mt-3">
+                        @guest
+                            <li><a class="dropdown-item" href="{{ route('login') }}">Đăng nhập</a></li>
+                            <li><a class="dropdown-item" href="{{ route('register') }}">Đăng ký</a></li>
+                        @endguest
+                        @auth
+                            <li class="dropdown-header border-bottom mb-2">
+                                <span class="text-gold fw-bold">⭐ {{ \Illuminate\Support\Facades\DB::table('points')->where('user_id', Auth::id())->sum('points') }} Điểm</span>
+                            </li>
+                            <li><a class="dropdown-item" href="{{ url('/profile') }}">Hồ sơ của tôi</a></li>
+                            <li><a class="dropdown-item" href="{{ url('/don-hang') }}">Lịch sử đơn hàng</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form action="{{ route('logout') }}" method="POST">
+                                    @csrf
+                                    <button class="dropdown-item text-danger" type="submit">Đăng xuất</button>
+                                </form>
+                            </li>
+                        @endauth
+                    </ul>
+                </div>
+                {{-- AUTH --}}
+            </div>
         </div>
-      </div>
-      {{-- end Nút search mobile --}}
+        
+        <div id="mSearch" class="collapse px-3 mt-2 d-lg-none">
+            <form action="{{ route('search') }}" method="GET">
+                <input class="form-control search-input" type="search" name="q" placeholder="Tìm kiếm bánh...">
+            </form>
+        </div>
+    </header>
 
-      {{-- start Ô tìm kiếm mobile --}}
-      <div id="mSearch" class="collapse mt-2 d-md-none">
-        <form action="{{ route('search') }}" method="GET">
-          <div class="input-group">
-            <input class="form-control search-input px-4"
-              type="search"
-              name="q"
-              value="{{ request('q') }}"
-              placeholder="Tìm kiếm tên bánh...">
-            <button class="btn btn-outline-secondary px-3 rounded-end-pill" type="submit">
-              <i class="bi bi-search"></i>
-            </button>
-          </div>
-        </form>
-      </div>
-      {{-- end Ô tìm kiếm mobile --}}
+    {{-- SOURCE CỦA VOUCHER --}}
+    <div class="offcanvas offcanvas-start border-0" tabindex="-1" id="offcanvasCategories" style="background: var(--cream);">
+       
+        <div class="offcanvas-body">
+            <nav class="nav flex-column gap-2">
+                <a class="nav-link-item py-2 border-bottom" href="{{ route('voucher.exchange.index') }}"><i class="bi bi-gift me-2 text-success"></i> Đổi thưởng Voucher</a>
+                <a class="nav-link-item py-2 border-bottom" href="{{ route('user-voucher.index') }}"><i class="bi bi-ticket-perforated me-2"></i> Túi Voucher của tôi</a>
+               
+            </nav>
+        </div>
+    </div>{{-- SOURCE CỦA VOUCHER --}}
 
-      {{-- start Nút Danh mục --}}
-      <div class="mt-3">
-        <button class="btn category-btn px-3 py-2" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCategories">
-          <i class="bi bi-list me-2"></i> Danh mục
-        </button>
-      </div>
-      {{-- end Nút Danh mục --}}
+    <main>@yield('content')</main>
 
+    <footer class="mt-5 py-5" style="background: #f1efeb;">
+        <div class="container text-center">
+            <h2 class="brand mb-3">STU <span>Bakery</span></h2>
+            <p class="small text-muted mb-0">© {{ date('Y') }} STU-DoAn. Handmade with Passion.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    @stack('scripts')
+
+    {{-- Toast Success --}}
+    @if (session('cart_success'))
+    <div id="toast-cart" class="shadow-lg border-0" style="position: fixed; top: 90px; right: 30px; background: #fff; border-left: 5px solid var(--gold) !important; padding: 15px 25px; border-radius: 8px; z-index: 9999;">
+        <i class="bi bi-check-circle-fill text-success me-2"></i> {{ session('cart_success') }}
     </div>
-  </header>
-
-  {{-- start Offcanvas Danh mục --}}
-  <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasCategories">
-    <div class="offcanvas-header">
-      <h5 class="offcanvas-title">Danh mục</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-    </div>
-    <div class="offcanvas-body small">
-      <ul class="list-unstyled">
-        {{-- Chính sách --}}
-        <li><a class="dropdown-item py-2" href="{{ route('chinhsachchung') }}">Các chính sách của cửa hàng</a></li>
-
-        {{-- List đổi thưởng --}}
-        <li><a class="dropdown-item fw-bold text-success" href="{{ route('voucher.exchange.index') }}">
-                <i class="bi bi-gift"></i> Đổi thưởng Voucher
-             </a></li>
-
-        {{-- Túi chứa voucher --}}
-        <li class="nav-item">
-    <a href="{{ route('user-voucher.index') }}" class="nav-link">
-        <i class="fas fa-ticket-alt"></i>
-        <p>Túi Voucher Của Tôi</p>
-    </a>
-</li>
-
-        @foreach($globalCategories as $cate)
-        <li>
-
-          <a class="dropdown-item py-2" href="{{ route('category.show', $cate->id) }}">
-            {{ $cate->name }}
-          </a>
-        </li>
-        @endforeach
-
-      </ul>
-    </div>
-  </div>
-  {{-- end Offcanvas Danh mục --}}
-
-  {{-- start Layout main body --}}
-  <main>@yield('content')</main>
-  {{-- end Layout main body --}}
-
-  {{-- start footer --}}
-  <footer class="mt-5 py-4 footer-background">
-    <div class="container container-wide text-center small text-muted">
-      © {{ date('Y') }} Stu-DoAn
-    </div>
-  </footer>
-  {{-- end footer --}}
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  @stack('scripts')
+    <script>
+        setTimeout(() => {
+            const t = document.getElementById('toast-cart');
+            if (t) { t.style.opacity = '0'; setTimeout(() => t.remove(), 400); }
+        }, 3000);
+    </script>
+    @endif
 </body>
-
-
-@if (session('cart_success'))
-<div id="toast-cart"
-  style="
-            position: fixed;
-            top: 70px;            
-            right: 200px;         
-            background: #d4f4dd;
-            color: #155724;
-            padding: 10px 20px;
-            border-radius: 10px;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-            font-weight: 600;
-            z-index: 9999;
-            transition: all 0.4s;
-        ">
-  {{ session('cart_success') }}
-</div>
-
-<script>
-  setTimeout(() => {
-    const t = document.getElementById('toast-cart');
-    if (t) {
-      t.style.opacity = '0';
-      setTimeout(() => t.remove(), 400);
-    }
-  }, 2000);
-</script>
-@endif
-
-
 </html>
